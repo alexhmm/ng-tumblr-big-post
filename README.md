@@ -1,6 +1,10 @@
-# NgTumblr
+# ng-tumblr
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.6.
+Create Angular (10.0.6) based Tumblr templates.
+
+## Installation
+
+Run `npm install` to install dependencies.
 
 ## Development server
 
@@ -13,6 +17,15 @@ Run `ng generate component component-name` to generate a new component. You can 
 ## Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+
+## Deployment on Tumblr
+
+Run `ng build --prod` to build the project.
+
+Run `npm run inline` to inline index.html.
+
+Copy content from formatted _dist/inline.html_ into Tumblr Editor. <br />
+Preview in Tumblr Editor might be unavailable.
 
 ## Running unit tests
 
