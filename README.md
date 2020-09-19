@@ -18,15 +18,6 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Deployment on Tumblr
-
-Run `ng build --prod` to build the project.
-
-Run `npm run inline` to inline index.html.
-
-Copy content from formatted _dist/inline.html_ into Tumblr Editor. <br />
-Preview in Tumblr Editor might be unavailable.
-
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
@@ -38,3 +29,34 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Installation
+
+Run `npm install` to install dependencies.
+
+## Usage / Known Issues
+
+Template coding could be bugged. <br />
+Tumblr Editor doesn't recognize template variables including ':' (e.g. {block:ifMetaTag} won't work).<br />
+So better make usage of the Tumblr API V2: https://www.tumblr.com/docs/en/api/v2. <br />
+The Tumblr API only supports synchronous requests, so Angular's HTTPClientModule won't work. <br />
+Use XMLHttpRequest to issue HTTP requests in order to exchange data between your blog and the Tumblr API.
+
+Use the environment to declare global variables:
+
+```
+export const environment = {
+  ...
+  apiKey: 'YOUR_API_KEY',
+  apiUrl: 'YOUR_TUMBLR_API_URL'
+};
+```
+
+## Deployment on Tumblr
+
+Run `ng build --prod` to build a production build.
+
+Run `npm run inline` to inline index.html.
+
+Copy content from formatted _dist/inline.html_ into Tumblr Editor.
+Preview in Tumblr Editor might be unavailable.
