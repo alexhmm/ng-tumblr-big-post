@@ -1,0 +1,10 @@
+<section *ngIf="posts" class="posts">
+  <article *ngFor="let post of posts" class="posts-item">
+    <div class="posts-item-header">
+      {{ post.summary }}
+    </div>
+    <div class="posts-item-photo">
+      <img [src]="post.photos[0].original_size.url" />
+    </div>
+  </article>
+</section>
