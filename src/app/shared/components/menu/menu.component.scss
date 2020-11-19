@@ -1,0 +1,68 @@
+@import '../../../../styles/breakpoints.scss';
+@import '../../../../styles/mixins.scss';
+@import '../../../../styles/theme.scss';
+
+.menu {
+  align-items: center;
+  display: flex;
+  right: 12px;
+  position: fixed;
+  top: 12px;
+  z-index: 100;
+  & svg-icon {
+    padding: 4px;
+    &:not(:last-child) {
+      margin-right: 16px;
+    }
+  }
+}
+
+@media screen and (min-width: $sm) {
+  .menu {
+    right: 28px;
+    top: 28px;
+  }
+}
+
+@media screen and (min-width: $xl) {
+  .menu {
+    right: 44px;
+    top: 60px;
+  }
+}
+
+@media screen and (min-width: $fhd) {
+  .menu {
+    &-search {
+      display: none;
+    }
+    &-menu {
+      & svg {
+        height: 32px;
+        width: 32px;
+      }
+    }
+  }
+}
+
+@media (hover: hover) {
+  .menu {
+    & svg-icon {
+      & svg {
+        & ellipse,
+        line {
+          @include transition(0.25s, 0s, ease-in-out, stroke);
+        }
+      }
+      &:hover {
+        cursor: pointer;
+        & svg {
+          & ellipse,
+          line {
+            stroke: $light-color-hover;
+          }
+        }
+      }
+    }
+  }
+}

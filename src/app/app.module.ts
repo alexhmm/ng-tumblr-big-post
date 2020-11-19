@@ -1,13 +1,36 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
+import { AngularSvgIconModule } from 'angular-svg-icon';
 
-import { AppRoutingModule } from './app-routing.module';
+// App component
 import { AppComponent } from './app.component';
-import { PostsComponent } from './components/posts/posts.component';
+
+// App modules
+import { PostsModule } from './posts/posts.module';
+import { SharedModule } from './shared/shared.module';
+
+/**
+ * App routes
+ */
+const routes: Routes = [
+  {
+    path: '',
+    loadChildren: () => import('./posts/posts.module').then(m => m.PostsModule)
+  }
+];
 
 @NgModule({
-  declarations: [AppComponent, PostsComponent],
-  imports: [BrowserModule, AppRoutingModule],
+  declarations: [AppComponent],
+  imports: [
+    AngularSvgIconModule.forRoot(),
+    BrowserModule,
+    HttpClientModule,
+    PostsModule,
+    RouterModule.forRoot(routes),
+    SharedModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

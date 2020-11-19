@@ -1,0 +1,38 @@
+@import '../../../../styles/breakpoints.scss';
+@import '../../../../styles/mixins.scss';
+@import '../../../../styles/theme.scss';
+
+.nav-side {
+  display: none;
+  flex-direction: column;
+  left: 64px;
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  & a {
+    color: $light-nav-color;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    &:not(:last-child) {
+      margin-bottom: 16px;
+    }
+  }
+}
+
+@media screen and (min-width: $fhd) {
+  .nav-side {
+    display: flex;
+  }
+}
+
+@media (hover: hover) {
+  .nav-side {
+    & a {
+      @include transition(0.25s, 0s, ease-in-out, color);
+      &:hover {
+        color: $light-color-hover;
+      }
+    }
+  }
+}

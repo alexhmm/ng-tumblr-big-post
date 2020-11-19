@@ -1,0 +1,12 @@
+<section class="posts">
+  <div *ngIf="stateLoading" class="posts-loading">Loading</div>
+  <ng-container *ngIf="!stateLoading">
+    <!-- <article class="posts-item" *ngFor="let post of posts">
+      <app-post-photo
+        *ngIf="post.type === 'photo'"
+        [post]="post"
+      ></app-post-photo>
+    </article> -->
+    <app-post-photo [post]="posts[0]"></app-post-photo>
+  </ng-container>
+</section>

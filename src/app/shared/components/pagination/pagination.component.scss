@@ -1,0 +1,68 @@
+@import '../../../../styles/breakpoints.scss';
+@import '../../../../styles/mixins.scss';
+
+.pagination {
+  bottom: 0;
+  height: calc((100vh - 400px) / 2);
+  left: 50%;
+  position: fixed;
+  transform: translateX(-50%);
+  align-items: center;
+  display: flex;
+  z-index: 100;
+  &-count {
+    white-space: nowrap;
+  }
+  &-next {
+    padding-left: 24px;
+    width: 48px;
+  }
+  &-prev {
+    padding-right: 24px;
+    width: 48px;
+  }
+}
+
+@media screen and (min-width: $sm) {
+  .pagination {
+    height: 15vh;
+  }
+}
+
+@media screen and (min-width: $xl) {
+  .pagination {
+    &-next {
+      padding-left: 36px;
+      width: 48px;
+    }
+    &-prev {
+      padding-right: 36px;
+      width: 48px;
+    }
+  }
+}
+
+@media screen and (min-width: $xl) {
+  .pagination {
+    height: 10vh;
+  }
+}
+
+@media (hover: hover) {
+  .pagination {
+    &-next {
+      @include transition(0.15s, 0s, ease-in-out, transform);
+      &:hover {
+        cursor: pointer;
+        transform: translateX(4px);
+      }
+    }
+    &-prev {
+      @include transition(0.15s, 0s, ease-in-out, transform);
+      &:hover {
+        cursor: pointer;
+        transform: translateX(-4px);
+      }
+    }
+  }
+}
