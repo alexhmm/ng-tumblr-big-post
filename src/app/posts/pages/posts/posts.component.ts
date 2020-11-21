@@ -1,4 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  Renderer2,
+  ViewChildren
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -7,6 +16,7 @@ import * as moment from 'moment';
 
 import { PostsService } from 'src/app/posts/services/posts.service';
 import { Post } from 'src/app/posts/models/post.interface';
+import { PostPhotoComponent } from '../../components/post-photo/post-photo.component';
 
 /**
  * Displays tumblr posts
@@ -16,7 +26,12 @@ import { Post } from 'src/app/posts/models/post.interface';
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.scss']
 })
-export class PostsComponent implements OnInit, OnDestroy {
+export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
+  /**
+   * Current post index
+   */
+  currentIndex: number;
+
   /**
    * Offset
    */
@@ -33,11 +48,6 @@ export class PostsComponent implements OnInit, OnDestroy {
   posts: Post[] = [];
 
   /**
-   * Active DOM posts
-   */
-  postsActive: Post[] = [];
-
-  /**
    * Loading state
    */
   stateLoading: boolean;
@@ -48,9 +58,18 @@ export class PostsComponent implements OnInit, OnDestroy {
   tag: string;
 
   /**
+   * Posts count
+   */
+  totalPosts: number;
+
+  /**
    * Unsubscribe
    */
   unsubscribe$ = new Subject();
+
+  @ViewChildren('post', { read: ElementRef }) private postsElements: QueryList<
+    ElementRef<PostPhotoComponent>
+  >;
 
   /**
    * PostsComponent constructor
@@ -58,6 +77,7 @@ export class PostsComponent implements OnInit, OnDestroy {
    * @param postsService PostsService
    */
   constructor(
+    private renderer2: Renderer2,
     private route: ActivatedRoute,
     private postsService: PostsService
   ) {}
@@ -69,6 +89,16 @@ export class PostsComponent implements OnInit, OnDestroy {
     this.initSubscriptionPosts();
     this.initSubscriptionStateLoading();
     this.initSubscriptionRouteParams();
+    this.initSubscriptionTotalPosts();
+  }
+
+  /**
+   * A lifecycle hook that is called after Angular has fully initialized a component's view.
+   */
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.initSubscriptionCurrentIndex();
+    }, 1000);
   }
 
   /**
@@ -80,6 +110,35 @@ export class PostsComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Inits subscription on current index
+   */
+  initSubscriptionCurrentIndex(): void {
+    this.postsService.currentIndex
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(currentIndex => {
+        const oldIndex = this.currentIndex;
+        this.currentIndex = currentIndex;
+        const postsElementsArray = this.postsElements.toArray();
+        // Fade out previous post
+        if (oldIndex > -1) {
+          this.renderer2.setStyle(
+            postsElementsArray[oldIndex].nativeElement,
+            'opacity',
+            '0'
+          );
+        }
+        // Fade in next post
+        if (this.currentIndex > -1) {
+          this.renderer2.setStyle(
+            postsElementsArray[this.currentIndex].nativeElement,
+            'opacity',
+            '1'
+          );
+        }
+      });
+  }
+
+  /**
    * Inits subscription on posts. Formats date.
    */
   initSubscriptionPosts(): void {
@@ -88,7 +147,7 @@ export class PostsComponent implements OnInit, OnDestroy {
       .subscribe(posts => {
         if (posts) {
           const mapPosts = [];
-          for (const post of posts.response.posts) {
+          for (const post of posts) {
             const mapPost = post;
             mapPost.date = moment(post.date.substr(0, 10)).format('LL');
             mapPosts.push(mapPost);
@@ -107,7 +166,7 @@ export class PostsComponent implements OnInit, OnDestroy {
         this.postsService.setTag(params.tag);
       }
       if (Object.keys(params).length === 0 && params.constructor === Object) {
-        this.postsService.getPosts(this.postsService.limit, null, null, null);
+        this.postsService.getPosts(this.postsService.limit, 0, null, null);
       }
       if (params.page && !params.tag) {
         this.postsService.getPosts(
@@ -154,5 +213,16 @@ export class PostsComponent implements OnInit, OnDestroy {
     this.postsService.stateLoading
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(stateLoading => (this.stateLoading = stateLoading));
+  }
+
+  /**
+   * Inits subscription on total posts count.
+   */
+  initSubscriptionTotalPosts(): void {
+    this.postsService.totalPosts
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(totalPosts => {
+        this.totalPosts = totalPosts;
+      });
   }
 }

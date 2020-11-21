@@ -1,21 +1,43 @@
-import {
-  Component,
-  OnInit,
-  Input
-} from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
+import { Post } from '../../models/post.interface';
+
+/**
+ * PostPhotoComponent
+ */
 @Component({
   selector: 'app-post-photo',
   templateUrl: './post-photo.component.html',
   styleUrls: ['./post-photo.component.scss']
 })
-export class PostPhotoComponent implements OnInit {
-  @Input() post: any;
+export class PostPhotoComponent implements OnChanges {
+  /**
+   * Post
+   */
+  @Input() post: Post;
 
+  /**
+   * Image source.
+   */
+  src = '';
+
+  /**
+   * Image source loaded validilty.
+   */
+  @Input() srcLoaded: boolean;
+
+  /**
+   * PostPhotoComponent constructor.
+   */
   constructor() {}
 
   /**
-   * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
+   * A lifecycle hook that is called when any data-bound property of a directive changes.
+   * @param changes SimpleChanges
    */
-  ngOnInit(): void {}
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.srcLoaded.currentValue) {
+      this.src = this.post.photos[0].original_size.url;
+    }
+  }
 }

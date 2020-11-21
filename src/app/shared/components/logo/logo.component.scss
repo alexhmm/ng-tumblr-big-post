@@ -19,7 +19,7 @@
   }
 }
 
-@media screen and (min-width: $sm) {
+@media (min-width: $sm) {
   .logo {
     font-size: 2rem;
     left: 32px;
@@ -27,13 +27,13 @@
   }
 }
 
-@media screen and (min-width: $md) {
+@media (min-width: $md) {
   .logo {
     font-size: 2.25rem;
   }
 }
 
-@media screen and (min-width: $xl) {
+@media (min-width: $xl) {
   .logo {
     font-size: 2.5rem;
     left: 48px;
@@ -41,7 +41,7 @@
   }
 }
 
-@media screen and (min-width: $fhd) {
+@media (min-width: $fhd) {
   .logo {
     font-size: 3rem;
   }

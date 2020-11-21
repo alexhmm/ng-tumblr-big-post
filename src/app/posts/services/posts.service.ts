@@ -10,7 +10,9 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class PostsService {
-  limit = 10;
+  currentIndexSrc = new BehaviorSubject<number>(0);
+  currentIndex = this.currentIndexSrc.asObservable();
+  limit = 20;
   offsetSrc = new BehaviorSubject<number>(null);
   offset = this.offsetSrc.asObservable();
   postsSrc = new BehaviorSubject<any>(null);
@@ -19,6 +21,8 @@ export class PostsService {
   stateLoading = this.stateLoadingSrc.asObservable();
   tagSrc = new BehaviorSubject<string>(null);
   tag = this.tagSrc.asObservable();
+  titleSrc = new BehaviorSubject<string>(null);
+  title = this.titleSrc.asObservable();
   totalPostsSrc = new BehaviorSubject<number>(null);
   totalPosts = this.totalPostsSrc.asObservable();
 
@@ -28,7 +32,7 @@ export class PostsService {
   constructor() {}
 
   /**
-   * Returns calculated offset by page
+   * Returns calculated offset by page.
    * @param page Page
    */
   getOffsetByPage(page: string): number {
@@ -36,7 +40,7 @@ export class PostsService {
   }
 
   /**
-   * Returns calculated page by offset
+   * Returns calculated page by offset.
    * @param offset Offset
    */
   getPageByOffset(offset: number): number {
@@ -44,7 +48,7 @@ export class PostsService {
   }
 
   /**
-   * Get Tumblr posts
+   * Get Tumblr posts.
    * @param limit Limit
    * @param offset Offset
    * @param tag Tag
@@ -70,8 +74,22 @@ export class PostsService {
         httpRequest.response
       ) {
         const response = JSON.parse(httpRequest.response);
-        this.postsSrc.next(response);
-        this.totalPostsSrc.next(response.response.total_posts);
+        // Concat more post items while navigating
+        if (this.postsSrc.value && this.postsSrc.value.length > 0) {
+          this.postsSrc.next(
+            this.postsSrc.value.concat(response.response.posts)
+          );
+          // Wait to render components
+          setTimeout(() => {
+            this.currentIndexSrc.next(offset);
+          }, 250);
+        } else {
+          // Init posts
+          this.postsSrc.next(response.response.posts);
+          this.totalPostsSrc.next(response.response.total_posts);
+          this.titleSrc.next(response.response.blog.title);
+          this.currentIndexSrc.next(0);
+        }
       }
     };
     // Define query params
@@ -94,7 +112,15 @@ export class PostsService {
   }
 
   /**
-   * Sets loading state
+   * Sets current index.
+   * @param currentIndex Current index
+   */
+  setCurrentIndex(currentIndex: number): void {
+    this.currentIndexSrc.next(currentIndex);
+  }
+
+  /**
+   * Sets loading state.
    * @param stateLoading State loading
    */
   setStateLoading(stateLoading: boolean): void {
@@ -102,7 +128,7 @@ export class PostsService {
   }
 
   /**
-   * Sets tag
+   * Sets tag.
    * @param tag Tag
    */
   setTag(tag: string): void {
@@ -110,7 +136,7 @@ export class PostsService {
   }
 
   /**
-   * Sets total posts
+   * Sets total posts count.
    * @param totalPosts Total posts
    */
   setTotalPosts(totalPosts: number): void {

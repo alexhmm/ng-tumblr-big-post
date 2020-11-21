@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
 
 import { PostsService } from 'src/app/posts/services/posts.service';
 
@@ -9,16 +8,11 @@ import { PostsService } from 'src/app/posts/services/posts.service';
   templateUrl: './logo.component.html',
   styleUrls: ['./logo.component.scss']
 })
-export class LogoComponent implements OnInit, OnDestroy {
+export class LogoComponent implements OnInit {
   /**
    * Blog title
    */
   title: string;
-
-  /**
-   * Unsubscribe
-   */
-  unsubscribe$ = new Subject();
 
   constructor(private postsService: PostsService) {}
 
@@ -26,27 +20,24 @@ export class LogoComponent implements OnInit, OnDestroy {
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
    */
   ngOnInit(): void {
-    this.initSubscriptionPosts();
-  }
-
-  /**
-   * A lifecycle hook that is called when a directive, pipe, or service is destroyed.
-   */
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.initSubscriptionTitle();
   }
 
   /**
    * Inits subscription on posts. Formats date.
    */
-  initSubscriptionPosts(): void {
-    this.postsService.posts
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(posts => {
-        if (posts) {
-          this.title = posts.response.blog.title;
-        }
-      });
+  initSubscriptionTitle(): void {
+    this.postsService.title.pipe(take(2)).subscribe(title => {
+      if (title) {
+        this.title = title;
+      }
+    });
+  }
+
+  /**
+   * Handler on clicking logo.
+   */
+  onHome(): void {
+    this.postsService.setCurrentIndex(0);
   }
 }

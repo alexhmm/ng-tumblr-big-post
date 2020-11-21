@@ -11,25 +11,35 @@
   display: flex;
   z-index: 100;
   &-count {
+    width: 80px;
+    text-align: center;
     white-space: nowrap;
   }
   &-next {
-    padding-left: 24px;
+    height: 24px;
+    padding-left: 12px;
     width: 48px;
   }
   &-prev {
-    padding-right: 24px;
+    height: 24px;
+    padding-right: 12px;
     width: 48px;
   }
 }
 
-@media screen and (min-width: $sm) {
+@media (min-width: $xs) {
+  .pagination {
+    height: calc((100vh - 480px) / 2);
+  }
+}
+
+@media (min-width: $sm) {
   .pagination {
     height: 15vh;
   }
 }
 
-@media screen and (min-width: $xl) {
+@media (min-width: $xl) {
   .pagination {
     &-next {
       padding-left: 36px;
@@ -42,7 +52,7 @@
   }
 }
 
-@media screen and (min-width: $xl) {
+@media (min-width: $xl) {
   .pagination {
     height: 10vh;
   }

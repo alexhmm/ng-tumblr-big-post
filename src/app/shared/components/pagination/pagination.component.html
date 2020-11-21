@@ -1,5 +1,11 @@
 <div class="pagination">
-  <svg-icon src="assets/icons/prev.svg" class="pagination-prev"></svg-icon>
-  <span class="pagination-count">1 / 153</span>
-  <svg-icon src="assets/icons/next.svg" class="pagination-next"></svg-icon>
+  <a href="#" class="pagination-prev">
+    <svg-icon src="assets/icons/prev.svg" (click)="onPreviousPost()"></svg-icon
+  ></a>
+  <span class="pagination-count"
+    >{{ currentIndex + 1 }} / {{ totalPosts }}</span
+  >
+  <a href="#" class="pagination-next">
+    <svg-icon src="assets/icons/next.svg" (click)="onNextPost()"></svg-icon
+  ></a>
 </div>
