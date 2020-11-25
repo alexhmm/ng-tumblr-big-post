@@ -1,0 +1,62 @@
+@import 'mixins.scss';
+
+.loader {
+  @include transition(0.5s, 0s, ease-in-out, opacity);
+  width: 30px;
+  height: 30px;
+  opacity: 0.5;
+  position: relative;
+  margin: auto;
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: black;
+    width: 8px;
+    height: 8px;
+    top: calc(50% - 8px);
+    left: calc(50% - 8px);
+  }
+  &::before {
+    opacity: 1;
+    animation: upperDot 2s ease-in-out infinite;
+  }
+  &::after {
+    opacity: 1;
+    animation: lowerDot 2s ease-in-out infinite;
+  }
+  &-list {
+    display: grid;
+    grid-template: repeat(3, 120px) / repeat(3, 120px);
+    grid-gap: 30px;
+  }
+  &-item {
+    display: flex;
+    background: rgba(0, 0, 0, 0.05);
+  }
+}
+
+@keyframes upperDot {
+  0% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(50%);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes lowerDot {
+  0% {
+    transform: translateY(50%);
+  }
+  50% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(50%);
+  }
+}

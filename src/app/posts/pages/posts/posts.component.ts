@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   OnDestroy,
@@ -14,9 +15,11 @@ import { takeUntil } from 'rxjs/operators';
 
 import * as moment from 'moment';
 
-import { PostsService } from 'src/app/posts/services/posts.service';
+import { fadeInOut } from 'src/app/shared/services/animations';
+
 import { Post } from 'src/app/posts/models/post.interface';
 import { PostPhotoComponent } from '../../components/post-photo/post-photo.component';
+import { PostsService } from 'src/app/posts/services/posts.service';
 
 /**
  * Displays tumblr posts
@@ -24,13 +27,19 @@ import { PostPhotoComponent } from '../../components/post-photo/post-photo.compo
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
-  styleUrls: ['./posts.component.scss']
+  styleUrls: ['./posts.component.scss'],
+  animations: [fadeInOut]
 })
 export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * Current post index
    */
   currentIndex: number;
+
+  /**
+   * Old post index
+   */
+  oldIndex: number;
 
   /**
    * Offset
@@ -77,6 +86,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param postsService PostsService
    */
   constructor(
+    private cdref: ChangeDetectorRef,
     private renderer2: Renderer2,
     private route: ActivatedRoute,
     private postsService: PostsService
@@ -96,8 +106,10 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
    * A lifecycle hook that is called after Angular has fully initialized a component's view.
    */
   ngAfterViewInit(): void {
+    // Wait for tumblr!?
     setTimeout(() => {
       this.initSubscriptionCurrentIndex();
+      this.initSubscriptionPostsElementsChanges();
     }, 1000);
   }
 
@@ -116,24 +128,48 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.postsService.currentIndex
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(currentIndex => {
-        const oldIndex = this.currentIndex;
+        this.oldIndex = this.currentIndex;
         this.currentIndex = currentIndex;
-        const postsElementsArray = this.postsElements.toArray();
-        // Fade out previous post
-        if (oldIndex > -1) {
-          this.renderer2.setStyle(
-            postsElementsArray[oldIndex].nativeElement,
-            'opacity',
-            '0'
-          );
-        }
-        // Fade in next post
-        if (this.currentIndex > -1) {
-          this.renderer2.setStyle(
-            postsElementsArray[this.currentIndex].nativeElement,
-            'opacity',
-            '1'
-          );
+        // Check if posts elements are aviable
+        if (
+          this.postsElements &&
+          this.postsElements.length > 0 &&
+          this.currentIndex < this.postsElements.length
+        ) {
+          const postsElementsArray = this.postsElements.toArray();
+          // Change components opacity on pagination
+          if (this.oldIndex !== this.currentIndex) {
+            if (
+              this.oldIndex > -1 &&
+              this.currentIndex > -1 &&
+              postsElementsArray[this.oldIndex] &&
+              postsElementsArray[this.currentIndex]
+            ) {
+              // Fade out old post
+              this.renderer2.setStyle(
+                postsElementsArray[this.oldIndex].nativeElement,
+                'opacity',
+                '0'
+              );
+              this.renderer2.setStyle(
+                postsElementsArray[this.currentIndex].nativeElement,
+                'opacity',
+                '1'
+              );
+            }
+          }
+          if (
+            !this.oldIndex &&
+            this.currentIndex > -1 &&
+            postsElementsArray[this.currentIndex]
+          ) {
+            // Fade in first post
+            this.renderer2.setStyle(
+              postsElementsArray[this.currentIndex].nativeElement,
+              'opacity',
+              '1'
+            );
+          }
         }
       });
   }
@@ -146,15 +182,34 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(posts => {
         if (posts) {
-          const mapPosts = [];
-          for (const post of posts) {
-            const mapPost = post;
-            mapPost.date = moment(post.date.substr(0, 10)).format('LL');
-            mapPosts.push(mapPost);
-          }
-          this.posts = mapPosts;
+          // const mapPosts = [];
+          // for (const post of posts) {
+          //   const mapPost = post;
+          //   mapPost.date = moment(post.date.substr(0, 10)).format('LL');
+          //   mapPosts.push(mapPost);
+          // }
+          // this.posts = mapPosts;
+          this.posts = posts;
         }
       });
+  }
+
+  /**
+   * Init subscription on posts elements changes.
+   */
+  initSubscriptionPostsElementsChanges(): void {
+    this.postsElements.changes.subscribe(() => {
+      if (this.postsElements.length > 0) {
+        if (this.currentIndex > 0) {
+          // Get next post on loading / concatting more posts.
+          this.postsService.setCurrentIndex(this.currentIndex + 1);
+        } else {
+          this.postsService.setCurrentIndex(0);
+        }
+        // Detect changes (avoid ExpressionChangedAfterItHasBeenCheckedError)
+        this.cdref.detectChanges();
+      }
+    });
   }
 
   /**
@@ -189,7 +244,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
       if (params.tag) {
         this.postsService.getPosts(
           this.postsService.limit,
-          null,
+          0,
           params.tag,
           null
         );
@@ -202,6 +257,13 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
           params.tag,
           null
         );
+      }
+
+      // Set counter visibility
+      if (params.postId) {
+        this.postsService.setCounterVisibility(false);
+      } else {
+        this.postsService.setCounterVisibility(true);
       }
     });
   }

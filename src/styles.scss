@@ -3,6 +3,14 @@
 @import 'styles/mixins.scss';
 @import 'styles/theme.scss';
 
+/* OVERWRITE TUMBLR ELEMENTS */
+
+iframe {
+  display: none !important;
+}
+
+/* APP STYLES */
+
 html {
   display: flex;
   justify-content: center;
@@ -85,4 +93,18 @@ svg-icon {
   // app-root {
   //   padding: 0px 128px;
   // }
+}
+
+@media (hover: hover) {
+  // html,
+  // body {
+  //   cursor: url('assets/icons/cursor.svg') 16 16, auto;
+  // }
+
+  .nav-side-item {
+    &:hover {
+      .cursor {
+      }
+    }
+  }
 }

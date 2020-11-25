@@ -11,7 +11,7 @@
     width="48"
     height="24"
   >
-    <polyline fill="none" stroke="black" stroke-width="7" points="29,79 7,57 29,35" />
-    <line stroke="black" stroke-width="7" x1="7" y1="57" x2="240" y2="57" />
+    <polyline fill="none" stroke="black" stroke-width="10" points="40,90 10,60 40,30" />
+    <line stroke="black" stroke-width="10" x1="15" y1="60" x2="240" y2="60" />
   </svg>
 </div>

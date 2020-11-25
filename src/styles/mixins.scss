@@ -1,3 +1,13 @@
+@mixin highlight-disable() {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 @mixin transition($duration, $delay, $animation, $properties...) {
   transition: all $duration $delay $animation;
   -moz-transition: all $duration $delay $animation;

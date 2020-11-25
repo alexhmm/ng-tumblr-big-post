@@ -1,6 +1,10 @@
 <section class="posts">
-  <div *ngIf="stateLoading" class="posts-loading">Loading</div>
-  <ng-container *ngIf="!stateLoading">
+  <!-- <div *ngIf="stateLoading" class="posts-loading"></div> -->
+  <div class="posts-loading">
+    <div [ngStyle]="{ opacity: stateLoading ? 0.5 : 0 }" class="loader"></div>
+    <!-- ... -->
+  </div>
+  <div *ngIf="!stateLoading" @fadeInOut>
     <app-post-photo
       *ngFor="let post of posts; let i = index"
       #post
@@ -10,8 +14,10 @@
         i === currentIndex ||
         (i === currentIndex + 1 && i + 1 < totalPosts - 1)
       "
-      [ngStyle]="{ 'z-index': i === currentIndex ? 81 : 80 }"
+      [ngStyle]="{
+        'z-index': i === currentIndex ? 81 : 80
+      }"
       class="posts-item"
     ></app-post-photo>
-  </ng-container>
+  </div>
 </section>

@@ -1,7 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
+
+import { Post } from '../models/post.interface';
 
 /**
  * PostsService
@@ -10,12 +13,14 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class PostsService {
+  counterVisibilitySrc = new BehaviorSubject<boolean>(false);
+  counterVisibility = this.counterVisibilitySrc.asObservable();
   currentIndexSrc = new BehaviorSubject<number>(0);
   currentIndex = this.currentIndexSrc.asObservable();
   limit = 20;
   offsetSrc = new BehaviorSubject<number>(null);
   offset = this.offsetSrc.asObservable();
-  postsSrc = new BehaviorSubject<any>(null);
+  postsSrc = new BehaviorSubject<Post[]>(null);
   posts = this.postsSrc.asObservable();
   stateLoadingSrc = new BehaviorSubject<boolean>(true);
   stateLoading = this.stateLoadingSrc.asObservable();
@@ -29,8 +34,7 @@ export class PostsService {
   /**
    * PostsService constructor.
    */
-  constructor() {}
-
+  constructor(private httpClient: HttpClient) {}
   /**
    * Returns calculated offset by page.
    * @param page Page
@@ -64,7 +68,7 @@ export class PostsService {
     };
     httpRequest.onloadend = () => {
       // Do something on load start (e.g. spinner start etc.)
-      this.setStateLoading(false);
+      // this.setStateLoading(false);
     };
     // Fill observable if response success
     httpRequest.onreadystatechange = () => {
@@ -77,38 +81,58 @@ export class PostsService {
         // Concat more post items while navigating
         if (this.postsSrc.value && this.postsSrc.value.length > 0) {
           this.postsSrc.next(
-            this.postsSrc.value.concat(response.response.posts)
+            this.postsSrc.getValue().concat(response.response.posts)
           );
-          // Wait to render components
-          setTimeout(() => {
-            this.currentIndexSrc.next(offset);
-          }, 250);
+          this.setStateLoading(false);
+          // }, 250);
         } else {
           // Init posts
           this.postsSrc.next(response.response.posts);
           this.totalPostsSrc.next(response.response.total_posts);
           this.titleSrc.next(response.response.blog.title);
-          this.currentIndexSrc.next(0);
+          this.currentIndexSrc.next(offset);
+          this.setStateLoading(false);
         }
       }
     };
-    // Define query params
-    let queryParams = `${environment.apiUrl}/posts?api_key=${environment.apiKey}&limit=${limit}`;
-    // Get posts by a given offset
+    let url = environment.apiUrl + '/posts?api_key=' + environment.apiKey;
+
+    if (limit) {
+      url = url.concat('&limit=' + limit);
+    }
     if (offset) {
-      queryParams = queryParams.concat('&offset=' + offset);
+      url = url.concat('&offset=' + offset);
     }
     // Get posts by a given tag
     if (tag) {
-      queryParams = queryParams.concat('&tag=' + tag);
+      url = url.concat('&tag=' + tag);
     }
     // Get a single post by a given id
     if (id) {
-      queryParams = queryParams.concat('&id=' + id + '&notes_info=true');
+      url = url.concat('&id=' + id + '&notes_info=true');
     }
+    // // Define query params
+    // let queryParams = `${environment.apiUrl}/posts?api_key=${environment.apiKey}&limit=${limit}`;
+    // // Get posts by a given offset
+    // if (offset) {
+    //   queryParams = queryParams.concat('&offset=' + offset);
+    // }
+    // // Get posts by a given tag
+    // if (tag) {
+    //   queryParams = queryParams.concat('&tag=' + tag);
+    // }
+    // // Get a single post by a given id
+    // if (id) {
+    //   queryParams = queryParams.concat('&id=' + id + '&notes_info=true');
+    // }
     // Send request
-    httpRequest.open('GET', queryParams);
+    // httpRequest.open('GET', queryParams);
+    httpRequest.open('GET', url);
     httpRequest.send();
+  }
+
+  setCounterVisibility(counterVisibility: boolean): void {
+    this.counterVisibilitySrc.next(counterVisibility);
   }
 
   /**
@@ -117,6 +141,46 @@ export class PostsService {
    */
   setCurrentIndex(currentIndex: number): void {
     this.currentIndexSrc.next(currentIndex);
+  }
+
+  /**
+   * Sets previous index
+   * @param previousIndex Previous index
+   */
+  setPreviousIndex(previousIndex: number): void {
+    if (previousIndex > -1) {
+      this.setCurrentIndex(previousIndex);
+    }
+  }
+
+  /**
+   * Sets next index.
+   * @param nextIndex Next index
+   */
+  setNextIndex(nextIndex: number): void {
+    if (nextIndex < this.totalPostsSrc.value) {
+      if (
+        nextIndex === this.postsSrc.value.length &&
+        this.postsSrc.value.length < this.totalPostsSrc.value
+      ) {
+        this.getPosts(
+          this.limit,
+          this.postsSrc.value.length,
+          this.tagSrc.value,
+          null
+        );
+      } else {
+        this.setCurrentIndex(nextIndex);
+      }
+    }
+  }
+
+  /**
+   * Sets posts.
+   * @param posts Posts
+   */
+  setPosts(posts: Post[]): void {
+    this.postsSrc.next(posts);
   }
 
   /**

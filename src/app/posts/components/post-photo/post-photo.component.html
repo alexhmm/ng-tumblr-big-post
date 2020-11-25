@@ -1,8 +1,73 @@
 <div class="post-photo">
-  <div class="post-photo-image">
-    <img alt="post?.summary" [src]="src" />
+  <div *ngIf="src" class="post-photo-image">
+    <img [src]="src" />
     <div class="post-photo-image-caption">
       {{ post?.summary }}
     </div>
+    <div class="post-photo-image-prev" (click)="onPreviousPost()">
+      <div class="icon-prev">
+        <svg
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 240 120"
+          enable-background="new 0 0 240 120"
+          xml:space="preserve"
+          width="48"
+          height="24"
+        >
+          <polyline
+            fill="none"
+            stroke="black"
+            stroke-width="10"
+            points="40,90 10,60 40,30"
+          />
+          <line
+            stroke="black"
+            stroke-width="10"
+            x1="15"
+            y1="60"
+            x2="240"
+            y2="60"
+          />
+        </svg>
+      </div>
+    </div>
+    <div class="post-photo-image-next" (click)="onNextPost()">
+      <svg
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        x="0px"
+        y="0px"
+        viewBox="0 0 240 120"
+        enable-background="new 0 0 240 120"
+        xml:space="preserve"
+        width="48"
+        height="24"
+      >
+        <polyline
+          fill="none"
+          stroke="black"
+          stroke-width="10"
+          points="200,90 230,60 200,30"
+        />
+        <line
+          stroke="black"
+          stroke-width="10"
+          x1="0"
+          y1="60"
+          x2="225"
+          y2="60"
+        />
+      </svg>
+    </div>
+    <!-- <div class="post-photo-image-beam">
+      <div class="post-photo-image-beam-item"></div>
+      <div class="post-photo-image-beam-item"></div>
+      <div class="post-photo-image-beam-item"></div>
+    </div> -->
   </div>
 </div>

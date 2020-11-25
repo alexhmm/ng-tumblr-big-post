@@ -1,23 +1,29 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { environment } from 'src/environments/environment';
+
+import { fadeInOut } from '../../services/animations';
+
 import { PostsService } from 'src/app/posts/services/posts.service';
 
 @Component({
-  selector: 'app-pagination',
-  templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.scss']
+  selector: 'app-footer',
+  templateUrl: './footer.component.html',
+  styleUrls: ['./footer.component.scss'],
+  animations: [fadeInOut]
 })
-export class PaginationComponent implements OnInit, OnDestroy {
+export class FooterComponent implements OnInit, OnDestroy {
+  /**
+   * Copyright text
+   */
+  copyright = environment.copyright;
+
   /**
    * Current post index
    */
   currentIndex: number;
-
-  /**
-   * Posts
-   */
-  posts: any;
 
   /**
    * Totol posts count
@@ -29,14 +35,19 @@ export class PaginationComponent implements OnInit, OnDestroy {
    */
   unsubscribe$ = new Subject();
 
+  /**
+   * Visible container
+   */
+  visibility: boolean;
+
   constructor(private postsService: PostsService) {}
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
    */
   ngOnInit(): void {
+    this.initSubscriptionCounterVisibility();
     this.initSubscriptionCurrentIndex();
-    this.initSubscriptionPosts();
     this.initSubscriptionTotalPosts();
   }
 
@@ -60,15 +71,13 @@ export class PaginationComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Inits subscription on posts. Formats date.
+   * Subscription on route params.
    */
-  initSubscriptionPosts(): void {
-    this.postsService.posts
+  initSubscriptionCounterVisibility(): void {
+    this.postsService.counterVisibilitySrc
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(posts => {
-        if (posts) {
-          this.posts = [...posts];
-        }
+      .subscribe(visibility => {
+        this.visibility = visibility;
       });
   }
 
@@ -81,33 +90,5 @@ export class PaginationComponent implements OnInit, OnDestroy {
       .subscribe(totalPosts => {
         this.totalPosts = totalPosts;
       });
-  }
-
-  /**
-   * Handler on previous post.
-   */
-  onPreviousPost(): void {
-    if (this.currentIndex - 1 > -1) {
-      this.postsService.setCurrentIndex(this.currentIndex - 1);
-      // if (this.currentIndex - 1)
-    }
-  }
-
-  /**
-   * Handler on next post.
-   */
-  onNextPost(): void {
-    // this.postsService.setPostNext(true);
-    if (this.currentIndex + 1 < this.totalPosts) {
-      // this.postsService.setCurrentIndex(this.currentIndex + 1);
-      if (
-        this.currentIndex + 1 === this.posts.length &&
-        this.posts.length < this.totalPosts
-      ) {
-        this.postsService.getPosts(20, this.posts.length, null, null);
-      } else {
-        this.postsService.setCurrentIndex(this.currentIndex + 1);
-      }
-    }
   }
 }

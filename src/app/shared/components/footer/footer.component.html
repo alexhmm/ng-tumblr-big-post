@@ -1,0 +1,11 @@
+<div *ngIf="copyright" class="copyright" @fadeInOut>
+  {{ copyright }}
+</div>
+<div
+  *ngIf="visibility && totalPosts > 0"
+  class="counter"
+  [ngStyle]="{ opacity: totalPosts > 0 ? 1 : 0 }"
+  @fadeInOut
+>
+  {{ currentIndex + 1 }} / {{ totalPosts }}
+</div>

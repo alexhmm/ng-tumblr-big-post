@@ -1,0 +1,54 @@
+@import '../../../../styles/breakpoints.scss';
+@import '../../../../styles/mixins.scss';
+@import '../../../../styles/theme.scss';
+
+.copyright {
+  bottom: 16px;
+  color: $light-color;
+  font-size: 0.85rem;
+  left: 16px;
+  opacity: 0.5;
+  position: fixed;
+}
+
+.counter {
+  @include transition(0.25s, 0s, ease-in-out, opacity);
+  align-items: center;
+  bottom: 0;
+  color: $light-color;
+  display: flex;
+  height: calc((100vh - 400px) / 2);
+  justify-content: center;
+  left: 50%;
+  opacity: 0;
+  position: fixed;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 100;
+}
+
+@media (min-width: $xs) {
+  .counter {
+    height: calc((100vh - 480px) / 2);
+  }
+}
+
+@media (min-width: $sm) {
+  .copyright {
+    bottom: 32px;
+    left: 32px;
+  }
+  .counter {
+    height: 15vh;
+  }
+}
+
+@media (min-width: $xl) {
+  .copyright {
+    bottom: 64px;
+    left: 48px;
+  }
+  .counter {
+    height: 10vh;
+  }
+}

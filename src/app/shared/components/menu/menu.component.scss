@@ -38,8 +38,9 @@
     }
     &-menu {
       & svg {
-        height: 32px;
-        width: 32px;
+        height: 40px;
+        width: 40px;
+        transform: scale(0.8);
       }
     }
   }
@@ -47,16 +48,22 @@
 
 @media (hover: hover) {
   .menu {
+    svg {
+      @include transition(0.25s, 0s, ease-in-out, transform);
+      cursor: pointer;
+      &:hover {
+        transform: scale(1);
+      }
+    }
     & svg-icon {
       & svg {
+        // @include transition(0.25, 0.5s, ease-in-out, transform);
         & ellipse,
         line {
-          @include transition(0.25s, 0s, ease-in-out, stroke);
+          @include transition(0.25s, 0s, ease-in-out, stroke, transform);
         }
-      }
-      &:hover {
-        cursor: pointer;
-        & svg {
+        &:hover {
+          // transform: scale(1);
           & ellipse,
           line {
             stroke: $light-color-hover;

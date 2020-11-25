@@ -10,6 +10,6 @@
     width="48"
     height="24"
   >
-    <polyline fill="none" stroke="black" stroke-width="7" points="211,79 233,57 211,35" />
-    <line stroke="black" stroke-width="7" x1="0" y1="57" x2="233" y2="57" />
+    <polyline fill="none" stroke="black" stroke-width="10" points="200,90 230,60 200,30" />
+    <line stroke="black" stroke-width="10" x1="0" y1="60" x2="225" y2="60" />
   </svg>

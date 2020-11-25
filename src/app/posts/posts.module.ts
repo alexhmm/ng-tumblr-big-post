@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { AngularSvgIconModule } from 'angular-svg-icon';
 
 // Module pages
 import { PostsComponent } from './pages/posts/posts.component';
@@ -10,6 +11,7 @@ import { PostPhotoComponent } from './components/post-photo/post-photo.component
 
 // Module services
 import { PostsService } from './services/posts.service';
+import { HttpClientModule } from '@angular/common/http';
 
 /**
  * Module routes
@@ -43,7 +45,12 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [PostsComponent, PostPhotoComponent],
-  imports: [CommonModule, RouterModule.forChild(routes)],
+  imports: [
+    AngularSvgIconModule,
+    CommonModule,
+    HttpClientModule,
+    RouterModule.forChild(routes)
+  ],
   providers: [PostsService]
 })
 export class PostsModule {}
