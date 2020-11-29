@@ -1,23 +1,22 @@
 <section class="posts">
-  <!-- <div *ngIf="stateLoading" class="posts-loading"></div> -->
   <div class="posts-loading">
     <div [ngStyle]="{ opacity: stateLoading ? 0.5 : 0 }" class="loader"></div>
-    <!-- ... -->
   </div>
-  <div *ngIf="!stateLoading" @fadeInOut>
-    <app-post-photo
-      *ngFor="let post of posts; let i = index"
-      #post
-      [post]="posts[i]"
-      [srcLoaded]="
-        (i === currentIndex - 1 && i - 1 > -1) ||
-        i === currentIndex ||
-        (i === currentIndex + 1 && i + 1 < totalPosts - 1)
-      "
-      [ngStyle]="{
-        'z-index': i === currentIndex ? 81 : 80
-      }"
-      class="posts-item"
-    ></app-post-photo>
-  </div>
+  <app-post-photo
+    *ngFor="let post of posts; let i = index"
+    #post
+    [post]="posts[i]"
+    [postIndex]="i"
+    [postVisible]="
+      postsLoaded.hasOwnProperty(i) && postsLoaded[i] && currentIndex === i
+    "
+    [loadSource]="
+      (i === currentIndex - 1 && i - 1 > -1) ||
+      i === currentIndex ||
+      (i === currentIndex + 1 && i + 1 < totalPosts - 1)
+    "
+    [ngStyle]="{
+      'z-index': i === currentIndex ? 81 : 80
+    }"
+  ></app-post-photo>
 </section>

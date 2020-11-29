@@ -1,6 +1,11 @@
-<div class="post-photo">
-  <div *ngIf="src" class="post-photo-image">
-    <img [src]="src" />
+<div
+  class="post-photo"
+  [ngStyle]="{
+    opacity: postVisible ? 1 : 0
+  }"
+>
+  <div class="post-photo-image">
+    <img [src]="src" (load)="onPostLoaded()" />
     <div class="post-photo-image-caption">
       {{ post?.summary }}
     </div>
@@ -64,10 +69,5 @@
         />
       </svg>
     </div>
-    <!-- <div class="post-photo-image-beam">
-      <div class="post-photo-image-beam-item"></div>
-      <div class="post-photo-image-beam-item"></div>
-      <div class="post-photo-image-beam-item"></div>
-    </div> -->
   </div>
 </div>

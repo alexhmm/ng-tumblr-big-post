@@ -15,22 +15,6 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
-  &-item {
-    @include transition(0.5s, 0s, ease-in-out, opacity);
-    opacity: 0;
-    &-container {
-      @include transition(0.5s, 0s, ease-in-out, opacity);
-      opacity: 0;
-    }
-    &-active {
-      z-index: 81;
-      opacity: 1;
-    }
-    &-inactive {
-      z-index: 80;
-      opacity: 0;
-    }
-  }
   &-loading {
     position: fixed;
     top: 50%;

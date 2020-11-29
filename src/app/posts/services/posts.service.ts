@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -15,13 +14,15 @@ import { Post } from '../models/post.interface';
 export class PostsService {
   counterVisibilitySrc = new BehaviorSubject<boolean>(false);
   counterVisibility = this.counterVisibilitySrc.asObservable();
-  currentIndexSrc = new BehaviorSubject<number>(0);
+  currentIndexSrc = new BehaviorSubject<number>(null);
   currentIndex = this.currentIndexSrc.asObservable();
   limit = 20;
   offsetSrc = new BehaviorSubject<number>(null);
   offset = this.offsetSrc.asObservable();
   postsSrc = new BehaviorSubject<Post[]>(null);
   posts = this.postsSrc.asObservable();
+  postsLoadedSrc = new BehaviorSubject<boolean[]>(null);
+  postsLoaded = this.postsLoadedSrc.asObservable();
   stateLoadingSrc = new BehaviorSubject<boolean>(true);
   stateLoading = this.stateLoadingSrc.asObservable();
   tagSrc = new BehaviorSubject<string>(null);
@@ -34,7 +35,7 @@ export class PostsService {
   /**
    * PostsService constructor.
    */
-  constructor(private httpClient: HttpClient) {}
+  constructor() {}
   /**
    * Returns calculated offset by page.
    * @param page Page
@@ -83,13 +84,27 @@ export class PostsService {
           this.postsSrc.next(
             this.postsSrc.getValue().concat(response.response.posts)
           );
-          this.setStateLoading(false);
-          // }, 250);
+          // New added posts are not loaded
+          const postsLoaded = this.postsLoadedSrc.value
+            ? [...this.postsLoadedSrc.value]
+            : [];
+          for (let i = 0; i < limit; i++) {
+            postsLoaded.push(false);
+          }
+          this.postsLoadedSrc.next(postsLoaded);
+          this.currentIndexSrc.next(offset);
         } else {
           // Init posts
           this.postsSrc.next(response.response.posts);
           this.totalPostsSrc.next(response.response.total_posts);
           this.titleSrc.next(response.response.blog.title);
+          const postsLoaded = this.postsLoadedSrc.value
+            ? [...this.postsLoadedSrc.value]
+            : [];
+          for (let i = 0; i < limit; i++) {
+            postsLoaded.push(false);
+          }
+          this.postsLoadedSrc.next(postsLoaded);
           this.currentIndexSrc.next(offset);
           this.setStateLoading(false);
         }
@@ -181,6 +196,30 @@ export class PostsService {
    */
   setPosts(posts: Post[]): void {
     this.postsSrc.next(posts);
+  }
+
+  /**
+   * Sets post loaded.
+   * @param index Post index
+   */
+  setPostLoaded(index: number): void {
+    // console.log('setPostLoaded', index);
+    if (
+      this.postsLoadedSrc.value &&
+      this.postsLoadedSrc.value.hasOwnProperty(index)
+    ) {
+      this.postsLoadedSrc.value[index] = true;
+      this.postsLoadedSrc.next(this.postsLoadedSrc.value);
+      // console.log(this.postsLoadedSrc.value);
+    }
+  }
+
+  /**
+   * Sets posts loaded.
+   * @param postsLoaded Posts loaded
+   */
+  setPostsLoaded(postsLoaded: boolean[]): void {
+    this.postsLoadedSrc.next(postsLoaded);
   }
 
   /**

@@ -1,24 +1,11 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  QueryList,
-  Renderer2,
-  ViewChildren
-} from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
+import { combineLatest, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import * as moment from 'moment';
 
-import { fadeInOut } from 'src/app/shared/services/animations';
-
 import { Post } from 'src/app/posts/models/post.interface';
-import { PostPhotoComponent } from '../../components/post-photo/post-photo.component';
 import { PostsService } from 'src/app/posts/services/posts.service';
 
 /**
@@ -27,8 +14,7 @@ import { PostsService } from 'src/app/posts/services/posts.service';
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
-  styleUrls: ['./posts.component.scss'],
-  animations: [fadeInOut]
+  styleUrls: ['./posts.component.scss']
 })
 export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
@@ -57,6 +43,11 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
   posts: Post[] = [];
 
   /**
+   * Posts loaded
+   */
+  postsLoaded: boolean[] = [];
+
+  /**
    * Loading state
    */
   stateLoading: boolean;
@@ -76,18 +67,12 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   unsubscribe$ = new Subject();
 
-  @ViewChildren('post', { read: ElementRef }) private postsElements: QueryList<
-    ElementRef<PostPhotoComponent>
-  >;
-
   /**
    * PostsComponent constructor
    * @param route ActivatedRoute
    * @param postsService PostsService
    */
   constructor(
-    private cdref: ChangeDetectorRef,
-    private renderer2: Renderer2,
     private route: ActivatedRoute,
     private postsService: PostsService
   ) {}
@@ -100,17 +85,16 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initSubscriptionStateLoading();
     this.initSubscriptionRouteParams();
     this.initSubscriptionTotalPosts();
+    this.initSubscriptionPostsLoadedCurrentIndex();
   }
 
   /**
    * A lifecycle hook that is called after Angular has fully initialized a component's view.
    */
   ngAfterViewInit(): void {
-    // Wait for tumblr!?
     setTimeout(() => {
       this.initSubscriptionCurrentIndex();
-      this.initSubscriptionPostsElementsChanges();
-    }, 1000);
+    }, 500);
   }
 
   /**
@@ -130,45 +114,27 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(currentIndex => {
         this.oldIndex = this.currentIndex;
         this.currentIndex = currentIndex;
-        // Check if posts elements are aviable
+      });
+  }
+
+  /**
+   * Subscription on posts loaded and current index.
+   */
+  initSubscriptionPostsLoadedCurrentIndex(): void {
+    combineLatest(this.postsService.postsLoaded, this.postsService.currentIndex)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(postsLoadedCurrentIndex => {
+        // Check if current index is loaded
         if (
-          this.postsElements &&
-          this.postsElements.length > 0 &&
-          this.currentIndex < this.postsElements.length
+          postsLoadedCurrentIndex &&
+          postsLoadedCurrentIndex[0] &&
+          postsLoadedCurrentIndex[1] > -1 &&
+          postsLoadedCurrentIndex[0].hasOwnProperty(postsLoadedCurrentIndex[1])
         ) {
-          const postsElementsArray = this.postsElements.toArray();
-          // Change components opacity on pagination
-          if (this.oldIndex !== this.currentIndex) {
-            if (
-              this.oldIndex > -1 &&
-              this.currentIndex > -1 &&
-              postsElementsArray[this.oldIndex] &&
-              postsElementsArray[this.currentIndex]
-            ) {
-              // Fade out old post
-              this.renderer2.setStyle(
-                postsElementsArray[this.oldIndex].nativeElement,
-                'opacity',
-                '0'
-              );
-              this.renderer2.setStyle(
-                postsElementsArray[this.currentIndex].nativeElement,
-                'opacity',
-                '1'
-              );
-            }
-          }
-          if (
-            !this.oldIndex &&
-            this.currentIndex > -1 &&
-            postsElementsArray[this.currentIndex]
-          ) {
-            // Fade in first post
-            this.renderer2.setStyle(
-              postsElementsArray[this.currentIndex].nativeElement,
-              'opacity',
-              '1'
-            );
+          this.postsLoaded = postsLoadedCurrentIndex[0];
+          // If current index is loaded unset loading state (fade out spinner)
+          if (postsLoadedCurrentIndex[0][postsLoadedCurrentIndex[1]]) {
+            this.postsService.setStateLoading(false);
           }
         }
       });
@@ -192,24 +158,6 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
           this.posts = posts;
         }
       });
-  }
-
-  /**
-   * Init subscription on posts elements changes.
-   */
-  initSubscriptionPostsElementsChanges(): void {
-    this.postsElements.changes.subscribe(() => {
-      if (this.postsElements.length > 0) {
-        if (this.currentIndex > 0) {
-          // Get next post on loading / concatting more posts.
-          this.postsService.setCurrentIndex(this.currentIndex + 1);
-        } else {
-          this.postsService.setCurrentIndex(0);
-        }
-        // Detect changes (avoid ExpressionChangedAfterItHasBeenCheckedError)
-        this.cdref.detectChanges();
-      }
-    });
   }
 
   /**

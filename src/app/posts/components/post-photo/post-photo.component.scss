@@ -14,32 +14,17 @@
 }
 
 .post-photo {
+  @include transition(0.5s, 0s, ease-in-out, opacity);
   align-items: center;
   display: flex;
   justify-content: center;
-  // max-height: 100%;
+  opacity: 0;
   max-height: 60vh;
   max-width: 100%;
   &-image {
     position: relative;
-    // max-height: 400px;
     max-height: 60vh;
     max-width: 100%;
-    &-beam {
-      display: flex;
-      height: 4px;
-      left: 50%;
-      position: absolute;
-      transform: translateX(-50%);
-      top: 16px;
-      width: 120px;
-      &-item {
-        background-color: red;
-        height: 100%;
-        margin: 0px 4px;
-        width: 36px;
-      }
-    }
     &-prev {
       @include highlight-disable();
       cursor: pointer;
@@ -71,7 +56,6 @@
       top: -32px;
     }
     & img {
-      // max-height: 400px;
       max-height: 60vh;
       max-width: 100%;
     }
@@ -85,13 +69,6 @@
 
 @media (min-width: $xs) {
   .post-photo {
-    // max-height: 480px;
-    // &-image {
-    //   max-height: 480px;
-    //   & img {
-    //     max-height: 480px;
-    //   }
-    // }
     max-height: 70vh;
     &-image {
       max-height: 70vh;
@@ -102,38 +79,12 @@
   }
 }
 
-// @media (min-width: $sm) {
-//   .post-photo {
-//     max-height: 70vh;
-//     &-image {
-//       max-height: 70vh;
-//       & img {
-//         max-height: 70vh;
-//       }
-//     }
-//   }
-// }
-
 @media (min-width: $md) {
   .post-photo {
     &-image {
       &-caption {
         left: 16px;
       }
-    }
-  }
-}
-
-@media (min-width: $lg) {
-  .post-photo {
-    &-image {
-      // &-caption {
-      //   display: block;
-      //   left: 16px;
-      //   position: absolute;
-      //   text-transform: uppercase;
-      //   top: -32px;
-      // }
     }
   }
 }

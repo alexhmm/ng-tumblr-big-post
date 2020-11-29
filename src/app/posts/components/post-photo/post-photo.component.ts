@@ -32,6 +32,16 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() post: Post;
 
   /**
+   * Post index
+   */
+  @Input() postIndex: number;
+
+  /**
+   * Post visibility
+   */
+  @Input() postVisible = false;
+
+  /**
    * Image source.
    */
   src = '';
@@ -39,7 +49,7 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Image source loaded validilty.
    */
-  @Input() srcLoaded: boolean;
+  @Input() loadSource: boolean;
 
   /**
    * Unsubscribe
@@ -63,8 +73,15 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
    * @param changes SimpleChanges
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.srcLoaded.currentValue) {
+    // Load post source
+    if (changes.loadSource && changes.loadSource.currentValue) {
       this.src = this.post.photos[0].original_size.url;
+    }
+    // Fade in post
+    if (changes.postVisible && changes.postVisible.currentValue) {
+      this.postVisible = true;
+    } else {
+      this.postVisible = false;
     }
   }
 
@@ -87,10 +104,23 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
+  /**
+   * Handler on setting next post.
+   */
   onNextPost(): void {
     this.postsService.setNextIndex(this.currentIndex + 1);
   }
 
+  /**
+   * Event when image loading has finished.
+   */
+  onPostLoaded(): void {
+    this.postsService.setPostLoaded(this.postIndex);
+  }
+
+  /**
+   * Handler on setting previous post.
+   */
   onPreviousPost(): void {
     this.postsService.setPreviousIndex(this.currentIndex - 1);
   }
