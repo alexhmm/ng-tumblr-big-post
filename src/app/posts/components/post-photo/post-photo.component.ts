@@ -6,6 +6,7 @@ import {
   OnInit,
   SimpleChanges
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -30,6 +31,11 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
    * Post
    */
   @Input() post: Post;
+
+  /**
+   * Post id
+   */
+  postId: string;
 
   /**
    * Post index
@@ -59,13 +65,17 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * PostPhotoComponent constructor.
    */
-  constructor(private postsService: PostsService) {}
+  constructor(
+    private postsService: PostsService,
+    private route: ActivatedRoute
+  ) {}
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
    */
   ngOnInit(): void {
     this.initSubscriptionCurrentIndex();
+    this.initSubscriptionRouteParams();
   }
 
   /**
@@ -102,6 +112,17 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(currentIndex => {
         this.currentIndex = currentIndex;
       });
+  }
+
+  /**
+   * Subscription on route params.
+   */
+  initSubscriptionRouteParams(): void {
+    this.route.params.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
+      if (params.postId) {
+        this.postId = params.postId;
+      }
+    });
   }
 
   /**

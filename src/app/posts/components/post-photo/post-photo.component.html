@@ -9,7 +9,11 @@
     <div class="post-photo-image-caption">
       {{ post?.summary }}
     </div>
-    <div class="post-photo-image-prev" (click)="onPreviousPost()">
+    <div
+      *ngIf="!postId"
+      class="post-photo-image-prev"
+      (click)="onPreviousPost()"
+    >
       <div class="icon-prev">
         <svg
           version="1.1"
@@ -40,7 +44,7 @@
         </svg>
       </div>
     </div>
-    <div class="post-photo-image-next" (click)="onNextPost()">
+    <div *ngIf="!postId" class="post-photo-image-next" (click)="onNextPost()">
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"

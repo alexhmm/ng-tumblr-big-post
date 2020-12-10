@@ -80,7 +80,11 @@ export class PostsService {
       ) {
         const response = JSON.parse(httpRequest.response);
         // Concat more post items while navigating
-        if (this.postsSrc.value && this.postsSrc.value.length > 0) {
+        if (
+          this.postsSrc.value &&
+          this.postsSrc.value.length > 0 &&
+          offset > 0
+        ) {
           this.postsSrc.next(
             this.postsSrc.getValue().concat(response.response.posts)
           );
@@ -105,7 +109,7 @@ export class PostsService {
             postsLoaded.push(false);
           }
           this.postsLoadedSrc.next(postsLoaded);
-          this.currentIndexSrc.next(offset);
+          this.currentIndexSrc.next(0);
           this.setStateLoading(false);
         }
       }

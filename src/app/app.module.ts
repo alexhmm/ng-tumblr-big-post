@@ -3,7 +3,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
-import { AngularSvgIconModule } from 'angular-svg-icon';
 
 // App component
 import { AppComponent } from './app.component';
@@ -25,7 +24,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    AngularSvgIconModule.forRoot(),
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,

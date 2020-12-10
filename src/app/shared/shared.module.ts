@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AngularSvgIconModule } from 'angular-svg-icon';
 
 // Shared components
 import { FooterComponent } from './components/footer/footer.component';
@@ -17,6 +17,6 @@ import { NavSideComponent } from './components/nav-side/nav-side.component';
     NavSideComponent
   ],
   exports: [FooterComponent, LogoComponent, MenuComponent, NavSideComponent],
-  imports: [AngularSvgIconModule, CommonModule, RouterModule]
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule]
 })
 export class SharedModule {}

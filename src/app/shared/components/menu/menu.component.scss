@@ -3,70 +3,219 @@
 @import '../../../../styles/theme.scss';
 
 .menu {
-  align-items: center;
-  display: flex;
-  right: 12px;
-  position: fixed;
-  top: 12px;
-  z-index: 100;
-  & svg-icon {
-    padding: 4px;
-    &:not(:last-child) {
-      margin-right: 16px;
+  &-bars {
+    @include transition(1s, 0s, ease-in-out, opacity);
+    align-items: center;
+    display: flex;
+    height: 1.75rem;
+    right: 12px;
+    opacity: 1;
+    position: fixed;
+    top: 12px;
+    z-index: 41;
+    width: 1.75rem;
+    &-line-1 {
+      @include transition(0.35s, 0s, ease-in-out, background-color, transform);
+      background-color: $light-color;
+      position: absolute;
+      height: 0.15em;
+      width: 100%;
+    }
+    &-line-2 {
+      background-color: $light-color;
+      position: absolute;
+      height: 0.15em;
+      top: 50%;
+      width: 100%;
+      @include transition(0.35s, 0s, ease-in-out, background-color, transform);
     }
   }
-}
-
-@media screen and (min-width: $sm) {
-  .menu {
-    right: 28px;
-    top: 28px;
-  }
-}
-
-@media screen and (min-width: $xl) {
-  .menu {
-    right: 44px;
-    top: 60px;
-  }
-}
-
-@media screen and (min-width: $fhd) {
-  .menu {
-    &-search {
-      display: none;
+  &-close {
+    @include transition(1s, 0s, ease-in-out, opacity);
+    align-items: center;
+    display: flex;
+    height: 1.75rem;
+    justify-content: center;
+    right: 12px;
+    opacity: 0;
+    position: fixed;
+    top: 12px;
+    z-index: 40;
+    width: 1.75rem;
+    &-line-1 {
+      @include transition(0.75s, 0s, ease-in-out, background-color, transform);
+      background-color: $light-color;
+      position: absolute;
+      height: 0.15em;
+      transform: rotate(45deg);
+      width: 90%;
     }
-    &-menu {
-      & svg {
-        height: 40px;
-        width: 40px;
-        transform: scale(0.8);
+    &-line-2 {
+      @include transition(0.75s, 0s, ease-in-out, background-color, transform);
+      background-color: $light-color;
+      position: absolute;
+      height: 0.15em;
+      transform: rotate(-45deg);
+      width: 90%;
+    }
+  }
+  &-container {
+    @include transition(0.5s, 0s, ease-in-out, opacity);
+    background-color: $light-menu-background-color;
+    height: 100%;
+    left: 0;
+    opacity: 1;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+    &-copyright {
+      @include transition(0.5s, 2s, ease-in-out, opacity, transform);
+      bottom: 16px;
+      display: flex;
+      font-size: 0.8rem;
+      justify-content: center;
+      position: fixed;
+      width: 100%;
+    }
+    &-navigation {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: center;
+      width: 100%;
+      &-items {
+        @include transition(0.5s, 0.5s, ease-in-out, opacity, transform);
+        display: flex;
+        flex-direction: column;
+        font-size: 2rem;
+        opacity: 0;
+        &-link {
+          padding: 8px 0px;
+        }
       }
+      &-search {
+        @include transition(0.5s, 1s, ease-in-out, opacity, transform);
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        padding: 16px 16px 48px 16px;
+        width: 100%;
+        & input {
+          border-bottom: 1px solid $light-color;
+          padding: 4px 0px;
+          width: 100%;
+        }
+      }
+      &-social {
+        @include transition(0.5s, 1.5s, ease-in-out, opacity, transform);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        opacity: 0;
+        &-item {
+          padding: 8px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: $sm) {
+  .menu {
+    &-bars,
+    &-close {
+      right: 28px;
+      top: 28px;
+    }
+    &-container {
+      &-copyright {
+        bottom: 32px;
+      }
+      &-navigation {
+        &-search {
+          padding: 32px 0px 64px 0px;
+          width: 420px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: $xl) {
+  .menu {
+    &-bars,
+    &-close {
+      right: 44px;
+      top: 60px;
+    }
+    &-container {
+      &-copyright {
+        bottom: 64px;
+      }
+      &-navigation {
+        &-items {
+          font-size: 3rem;
+        }
+        &-search {
+          padding: 64px 0px 128px 0px;
+          & input {
+            border-bottom: 2px solid $light-color;
+            font-size: 1.5rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: $fhd) {
+  .menu {
+    &-bars,
+    &-close {
+      height: 2.25rem;
+      width: 2.25rem;
     }
   }
 }
 
 @media (hover: hover) {
   .menu {
-    svg {
-      @include transition(0.25s, 0s, ease-in-out, transform);
+    &-bars {
       cursor: pointer;
       &:hover {
-        transform: scale(1);
+        & .menu-bars-line-1,
+        .menu-bars-line-2 {
+          background-color: $light-color-hover;
+        }
       }
     }
-    & svg-icon {
-      & svg {
-        // @include transition(0.25, 0.5s, ease-in-out, transform);
-        & ellipse,
-        line {
-          @include transition(0.25s, 0s, ease-in-out, stroke, transform);
+    &-close {
+      cursor: pointer;
+      &:hover {
+        & .menu-close-line-1,
+        .menu-close-line-2 {
+          background-color: $light-color-hover;
         }
-        &:hover {
-          // transform: scale(1);
-          & ellipse,
-          line {
-            stroke: $light-color-hover;
+      }
+    }
+    &-container {
+      &-navigation {
+        &-items {
+          a {
+            @include transition(0.25s, 0s, ease-in-out, color);
+            &:hover {
+              color: $light-color-hover;
+            }
+          }
+        }
+        &-social {
+          a {
+            @include transition(0.25s, 0s, ease-in-out, color);
+            &:hover {
+              color: $light-color-hover;
+            }
           }
         }
       }

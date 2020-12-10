@@ -4,6 +4,11 @@ export const environment = {
   apiUrl: '',
   copyright: '',
   social: {
-    instagram: ''
+    facebook: '',
+    instagram: '',
+    snapchat: '',
+    tiktok: '',
+    twitch: '',
+    twitter: ''
   }
 };

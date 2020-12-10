@@ -166,12 +166,15 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
   initSubscriptionRouteParams(): void {
     this.route.params.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
       if (params.tag) {
+        // Sets tag on search
         this.postsService.setTag(params.tag);
       }
       if (Object.keys(params).length === 0 && params.constructor === Object) {
+        // Get initial posts on no params
         this.postsService.getPosts(this.postsService.limit, 0, null, null);
       }
       if (params.page && !params.tag) {
+        // Get posts by page
         this.postsService.getPosts(
           this.postsService.limit,
           this.postsService.getOffsetByPage(params.page),
@@ -181,6 +184,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
         window.scroll(0, 0);
       }
       if (params.postId) {
+        // Get single post
         this.postsService.getPosts(
           this.postsService.limit,
           null,
@@ -190,6 +194,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
         window.scroll(0, 0);
       }
       if (params.tag) {
+        // Get tagged posts
         this.postsService.getPosts(
           this.postsService.limit,
           0,
@@ -199,6 +204,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
         window.scroll(0, 0);
       }
       if (params.tag && params.page) {
+        // Get tagged posts by page
         this.postsService.getPosts(
           this.postsService.limit,
           this.postsService.getOffsetByPage(params.page),
@@ -207,7 +213,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
         );
       }
 
-      // Set counter visibility
+      // Set counter visibility on single posts
       if (params.postId) {
         this.postsService.setCounterVisibility(false);
       } else {

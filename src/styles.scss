@@ -23,10 +23,8 @@ body {
   color: $light-color;
   display: flex;
   flex-direction: column;
-  // font-family: 'Raleway', sans-serif;
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
-  // margin: 0px 16px;
   margin: 0;
   width: 100%;
 }
@@ -47,64 +45,12 @@ a {
   }
 }
 
-svg[class='icon'],
-svg-icon {
-  // height: 24px;
-  // width: 24px;
-  line,
-  ellipse,
-  polygon,
-  polyline {
-    stroke: $light-color;
-  }
-  polygon {
-    fill: $light-color;
-  }
-}
-
-svg-icon {
-  height: 24px;
-}
-
-@media screen and (min-width: $sm) {
-  body {
-    // margin: 0px 32px;
-  }
-}
-
-@media screen and (min-width: $md) {
-  body {
-    // margin: 0px 64px;
-  }
-}
-
-@media screen and (min-width: $lg) {
-  body {
-    // margin: 0px 128px;
-  }
-}
-
-@media screen and (min-width: $fhd) {
-  body {
-    // margin: 0px 192px;
-    // width: 1920px;
-  }
-
-  // app-root {
-  //   padding: 0px 128px;
-  // }
-}
-
-@media (hover: hover) {
-  // html,
-  // body {
-  //   cursor: url('assets/icons/cursor.svg') 16 16, auto;
-  // }
-
-  .nav-side-item {
-    &:hover {
-      .cursor {
-      }
-    }
+input {
+  background: none;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  outline: none;
+  &:focus {
+    outline: none;
   }
 }
