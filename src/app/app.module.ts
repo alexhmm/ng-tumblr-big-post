@@ -28,7 +28,7 @@ const routes: Routes = [
     BrowserAnimationsModule,
     HttpClientModule,
     PostsModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
     SharedModule
   ],
   providers: [],
