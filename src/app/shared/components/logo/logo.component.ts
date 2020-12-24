@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { take } from 'rxjs/operators';
 
+import { fadeInOut } from '../../services/animations';
+
 import { PostsService } from 'src/app/posts/services/posts.service';
 
 @Component({
   selector: 'app-logo',
   templateUrl: './logo.component.html',
-  styleUrls: ['./logo.component.scss']
+  styleUrls: ['./logo.component.scss'],
+  animations: [fadeInOut]
 })
 export class LogoComponent implements OnInit {
   /**
