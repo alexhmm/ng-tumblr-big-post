@@ -51,9 +51,13 @@
     }
     &-caption {
       right: 16px;
+      overflow: hidden;
       position: absolute;
+      text-overflow: ellipsis;
       text-transform: uppercase;
       top: -32px;
+      white-space: nowrap;
+      width: calc(100% - 32px);
     }
     & img {
       max-height: 60vh;
