@@ -5,6 +5,7 @@ export const environment = {
   copyright: '',
   social: {
     facebook: '',
+    github: '',
     instagram: '',
     snapchat: '',
     tiktok: '',

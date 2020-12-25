@@ -118,6 +118,13 @@
         >Facebook</a
       >
       <a
+        *ngIf="social?.github && social.github !== ''"
+        [href]="'https://github.com/' + social.github"
+        target="_blank"
+        class="menu-container-navigation-social-item"
+        >Github</a
+      >
+      <a
         *ngIf="social?.instagram && social.instagram !== ''"
         [href]="'https://instagram.com/' + social.instagram"
         target="_blank"
