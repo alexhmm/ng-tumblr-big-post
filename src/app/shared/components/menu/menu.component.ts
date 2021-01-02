@@ -49,6 +49,11 @@ export class MenuComponent implements OnInit {
   @ViewChild('menuContainerElem') menuContainerElem: ElementRef;
 
   /**
+   * Menu item
+   */
+  @ViewChild('menuIconElem') menuIconElem: ElementRef;
+
+  /**
    * Navigation items
    */
   @ViewChildren('navigationItemElem') navigationItemElems!: QueryList<
@@ -90,91 +95,110 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {}
 
   /**
-   * Handler on closing menu.
+   * Handler to close menu.
    */
   onMenuClose(): void {
-    if (this.stateMenu) {
-      this.stateMenu = false;
+    this.stateMenu = false;
 
-      // Animate container
-      this.renderer2.setStyle(
-        this.menuContainerElem.nativeElement,
-        'transform',
-        'translateX(100%)'
-      );
+    // Animate container
+    this.renderer2.setStyle(
+      this.menuContainerElem.nativeElement,
+      'transform',
+      'translateX(100%)'
+    );
 
-      // Swap z-index of menu buttons
-      this.renderer2.setStyle(this.menuCloseElem.nativeElement, 'z-index', 51);
-      this.renderer2.setStyle(this.menuBarsElem.nativeElement, 'z-index', 52);
+    // Animate menu icon
+    this.renderer2.setStyle(
+      this.menuIconElem.nativeElement.children[0],
+      'transform',
+      'rotate(0deg) translateY(-150%)'
+    );
+    this.renderer2.setStyle(
+      this.menuIconElem.nativeElement.children[1],
+      'transform',
+      'rotate(0deg) translateY(150%)'
+    );
 
-      // Wait for menu container to fade out
-      setTimeout(() => {
-        // Animate navigation items
-        const navigationItems = this.navigationItemElems.toArray();
-        for (const navigationItem of navigationItems) {
-          this.renderer2.setStyle(
-            navigationItem.nativeElement,
-            'transform',
-            'translateX(100%)'
-          );
-          this.renderer2.setStyle(navigationItem.nativeElement, 'opacity', 0);
-        }
+    // Wait for menu container to fade out
+    setTimeout(() => {
+      // Animate navigation items
+      const navigationItems = this.navigationItemElems.toArray();
+      for (const navigationItem of navigationItems) {
+        this.renderer2.setStyle(
+          navigationItem.nativeElement,
+          'transform',
+          'translateX(100%)'
+        );
+        this.renderer2.setStyle(navigationItem.nativeElement, 'opacity', 0);
+      }
 
-        // Unset opacity of search input and info elements
-        this.renderer2.setStyle(this.copyrightElem.nativeElement, 'opacity', 0);
-        this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 0);
-        this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 0);
-      }, 500);
-    }
+      // Unset opacity of search input and info elements
+      this.renderer2.setStyle(this.copyrightElem.nativeElement, 'opacity', 0);
+      this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 0);
+      this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 0);
+    }, 500);
   }
 
   /**
-   * Handler on opening menu.
+   * Handler to open menu.
    */
   onMenuOpen(): void {
+    this.stateMenu = true;
+
+    // Animate container
+    this.renderer2.setStyle(
+      this.menuContainerElem.nativeElement,
+      'transform',
+      'translateX(0)'
+    );
+
+    // Animate menu icon
+    this.renderer2.setStyle(
+      this.menuIconElem.nativeElement.children[0],
+      'transform',
+      'rotate(45deg) translateY(0%)'
+    );
+    this.renderer2.setStyle(
+      this.menuIconElem.nativeElement.children[1],
+      'transform',
+      'rotate(-45deg) translateY(0%)'
+    );
+
+    // Animate navigation items
+    const navigationItems = this.navigationItemElems.toArray();
+    setTimeout(() => {
+      for (let i = 0; i < navigationItems.length; i++) {
+        setTimeout(() => {
+          this.renderer2.setStyle(
+            navigationItems[i].nativeElement,
+            'transform',
+            'translateX(0)'
+          );
+          this.renderer2.setStyle(
+            navigationItems[i].nativeElement,
+            'opacity',
+            1
+          );
+        }, (i + 1) * 350);
+      }
+    }, 250);
+
+    // Fade in search input and info elements
+    setTimeout(() => {
+      this.renderer2.setStyle(this.copyrightElem.nativeElement, 'opacity', 0.5);
+      this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 1);
+      this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 1);
+    }, 1000);
+  }
+
+  /**
+   * Handler to toggle menu.
+   */
+  onMenuToggle(): void {
     if (!this.stateMenu) {
-      this.stateMenu = true;
-
-      // Animate container
-      this.renderer2.setStyle(
-        this.menuContainerElem.nativeElement,
-        'transform',
-        'translateX(0)'
-      );
-
-      // Swap z-index of menu buttons
-      this.renderer2.setStyle(this.menuBarsElem.nativeElement, 'z-index', 51);
-      this.renderer2.setStyle(this.menuCloseElem.nativeElement, 'z-index', 52);
-
-      // Animate navigation items
-      const navigationItems = this.navigationItemElems.toArray();
-      setTimeout(() => {
-        for (let i = 0; i < navigationItems.length; i++) {
-          setTimeout(() => {
-            this.renderer2.setStyle(
-              navigationItems[i].nativeElement,
-              'transform',
-              'translateX(0)'
-            );
-            this.renderer2.setStyle(
-              navigationItems[i].nativeElement,
-              'opacity',
-              1
-            );
-          }, (i + 1) * 350);
-        }
-      }, 250);
-
-      // Fade in search input and info elements
-      setTimeout(() => {
-        this.renderer2.setStyle(
-          this.copyrightElem.nativeElement,
-          'opacity',
-          0.5
-        );
-        this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 1);
-        this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 1);
-      }, 1000);
+      this.onMenuOpen();
+    } else {
+      this.onMenuClose();
     }
   }
 

@@ -1,46 +1,7 @@
-<div
-  class="menu-bars"
-  #menuBarsElem
-  [ngStyle]="{
-    opacity: stateMenu ? 0 : 1
-  }"
-  (click)="onMenuOpen()"
->
-  <div
-    [ngStyle]="{
-      transform: stateMenu ? 'translateY(0%)' : 'translateY(-100%)'
-    }"
-    class="menu-bars-line-1"
-  ></div>
-  <div
-    [ngStyle]="{
-      transform: stateMenu ? 'translateY(0%)' : 'translateY(100%)'
-    }"
-    class="menu-bars-line-2"
-  ></div>
-</div>
-
-<div
-  class="menu-close"
-  #menuCloseElem
-  [ngStyle]="{
-    opacity: stateMenu ? 1 : 0
-  }"
-  (click)="onMenuClose()"
->
-  <div
-    [ngStyle]="{
-      transform: stateMenu ? 'rotate(45deg)' : 'rotate(0deg)'
-    }"
-    class="menu-close-line-1"
-  ></div>
-  <div
-    [ngStyle]="{
-      transform: stateMenu ? 'rotate(-45deg)' : 'rotate(0deg)'
-    }"
-    class="menu-close-line-2"
-  ></div>
-</div>
+<section #menuIconElem class="menu-icon" (click)="onMenuToggle()">
+  <div class="menu-icon-line-1"></div>
+  <div class="menu-icon-line-2"></div>
+</section>
 
 <main #menuContainerElem class="menu-container">
   <section class="menu-container-navigation">

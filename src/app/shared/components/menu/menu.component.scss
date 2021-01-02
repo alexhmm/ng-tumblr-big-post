@@ -3,62 +3,6 @@
 @import '../../../../styles/theme.scss';
 
 .menu {
-  &-bars {
-    @include transition(1s, 0s, ease-in-out, opacity);
-    align-items: center;
-    display: flex;
-    height: 1.75rem;
-    right: 12px;
-    opacity: 1;
-    position: fixed;
-    top: 12px;
-    z-index: 52;
-    width: 1.75rem;
-    &-line-1 {
-      @include transition(0.35s, 0s, ease-in-out, background-color, transform);
-      background-color: $light-color;
-      position: absolute;
-      height: 0.15em;
-      width: 100%;
-    }
-    &-line-2 {
-      background-color: $light-color;
-      position: absolute;
-      height: 0.15em;
-      top: 50%;
-      width: 100%;
-      @include transition(0.35s, 0s, ease-in-out, background-color, transform);
-    }
-  }
-  &-close {
-    @include transition(1s, 0s, ease-in-out, opacity);
-    align-items: center;
-    display: flex;
-    height: 1.75rem;
-    justify-content: center;
-    right: 12px;
-    opacity: 0;
-    position: fixed;
-    top: 12px;
-    z-index: 51;
-    width: 1.75rem;
-    &-line-1 {
-      @include transition(0.75s, 0s, ease-in-out, background-color, transform);
-      background-color: $light-color;
-      position: absolute;
-      height: 0.15em;
-      transform: rotate(45deg);
-      width: 90%;
-    }
-    &-line-2 {
-      @include transition(0.75s, 0s, ease-in-out, background-color, transform);
-      background-color: $light-color;
-      position: absolute;
-      height: 0.15em;
-      transform: rotate(-45deg);
-      width: 90%;
-    }
-  }
   &-container {
     @include transition(0.5s, 0s, ease-out, transform);
     background-color: $light-menu-background-color;
@@ -130,12 +74,39 @@
       }
     }
   }
+  &-icon {
+    @include transition(1s, 0s, ease-in-out, opacity);
+    align-items: center;
+    display: flex;
+    height: 1.75rem;
+    right: 12px;
+    opacity: 1;
+    position: fixed;
+    top: 12px;
+    z-index: 52;
+    width: 1.75rem;
+    &-line-1 {
+      @include transition(0.5s, 0s, ease-out, background-color, transform);
+      background-color: $light-color;
+      position: absolute;
+      height: 0.15em;
+      transform: translateY(-150%);
+      width: 100%;
+    }
+    &-line-2 {
+      @include transition(0.5s, 0s, ease-out, background-color, transform);
+      background-color: $light-color;
+      position: absolute;
+      height: 0.15em;
+      transform: translateY(150%);
+      width: 100%;
+    }
+  }
 }
 
 @media (min-width: $sm) {
   .menu {
-    &-bars,
-    &-close {
+    &-icon {
       right: 28px;
       top: 28px;
     }
@@ -190,8 +161,7 @@
 
 @media (min-width: $xl) {
   .menu {
-    &-bars,
-    &-close {
+    &-icon {
       right: 44px;
       top: 60px;
     }
@@ -216,8 +186,7 @@
 
 @media (min-width: $fhd) {
   .menu {
-    &-bars,
-    &-close {
+    &-icon {
       height: 2.25rem;
       width: 2.25rem;
     }
@@ -226,20 +195,11 @@
 
 @media (hover: hover) {
   .menu {
-    &-bars {
+    &-icon {
       cursor: pointer;
       &:hover {
-        & .menu-bars-line-1,
-        .menu-bars-line-2 {
-          background-color: $light-color-hover;
-        }
-      }
-    }
-    &-close {
-      cursor: pointer;
-      &:hover {
-        & .menu-close-line-1,
-        .menu-close-line-2 {
+        & .menu-icon-line-1,
+        .menu-icon-line-2 {
           background-color: $light-color-hover;
         }
       }
@@ -247,18 +207,10 @@
     &-container {
       &-navigation {
         &-item {
-          // @include transition(
-          //   0.25s,
-          //   0s,
-          //   // cubic-bezier(1, 0.82, 0.45, 1),
-          //   ease-out,
-          //   transform
-          // );
           a {
             @include transition(0.25s, 0s, ease-out, color);
           }
           &:hover {
-            // transform: translateX(-32px);
             a {
               color: $light-color-hover;
             }
