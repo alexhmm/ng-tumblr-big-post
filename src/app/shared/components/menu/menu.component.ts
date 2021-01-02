@@ -2,8 +2,10 @@ import {
   Component,
   ElementRef,
   OnInit,
+  QueryList,
   Renderer2,
-  ViewChild
+  ViewChild,
+  ViewChildren
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -17,24 +19,51 @@ import { environment } from 'src/environments/environment';
 })
 export class MenuComponent implements OnInit {
   /**
+   * About
+   */
+  about = environment.about;
+
+  /**
    * Copyright text
    */
   copyright = environment.copyright;
 
   /**
+   * Copyright
+   */
+  @ViewChild('copyrightElem') copyrightElem: ElementRef;
+
+  /**
    * Menu bars icon
    */
-  @ViewChild('menuBars') menuBars: ElementRef;
+  @ViewChild('menuBarsElem') menuBarsElem: ElementRef;
 
   /**
    * Menu close icon
    */
-  @ViewChild('menuClose') menuClose: ElementRef;
+  @ViewChild('menuCloseElem') menuCloseElem: ElementRef;
 
   /**
    * Menu container
    */
-  @ViewChild('menuContainer') menuContainer: ElementRef;
+  @ViewChild('menuContainerElem') menuContainerElem: ElementRef;
+
+  /**
+   * Navigation items
+   */
+  @ViewChildren('navigationItemElem') navigationItemElems!: QueryList<
+    ElementRef
+  >;
+
+  /**
+   * Search
+   */
+  @ViewChild('searchElem') searchElem: ElementRef;
+
+  /**
+   * Social links
+   */
+  @ViewChild('socialElem') socialElem: ElementRef;
 
   /**
    * SearchForm FormGroup
@@ -66,15 +95,35 @@ export class MenuComponent implements OnInit {
   onMenuClose(): void {
     if (this.stateMenu) {
       this.stateMenu = false;
-      this.renderer2.setStyle(this.menuClose.nativeElement, 'z-index', 40);
-      this.renderer2.setStyle(this.menuBars.nativeElement, 'z-index', 41);
+
+      // Animate container
+      this.renderer2.setStyle(
+        this.menuContainerElem.nativeElement,
+        'transform',
+        'translateX(100%)'
+      );
+
+      // Swap z-index of menu buttons
+      this.renderer2.setStyle(this.menuCloseElem.nativeElement, 'z-index', 51);
+      this.renderer2.setStyle(this.menuBarsElem.nativeElement, 'z-index', 52);
+
       // Wait for menu container to fade out
       setTimeout(() => {
-        this.renderer2.setStyle(
-          this.menuContainer.nativeElement,
-          'z-index',
-          -1
-        );
+        // Animate navigation items
+        const navigationItems = this.navigationItemElems.toArray();
+        for (const navigationItem of navigationItems) {
+          this.renderer2.setStyle(
+            navigationItem.nativeElement,
+            'transform',
+            'translateX(100%)'
+          );
+          this.renderer2.setStyle(navigationItem.nativeElement, 'opacity', 0);
+        }
+
+        // Unset opacity of search input and info elements
+        this.renderer2.setStyle(this.copyrightElem.nativeElement, 'opacity', 0);
+        this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 0);
+        this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 0);
       }, 500);
     }
   }
@@ -85,9 +134,47 @@ export class MenuComponent implements OnInit {
   onMenuOpen(): void {
     if (!this.stateMenu) {
       this.stateMenu = true;
-      this.renderer2.setStyle(this.menuContainer.nativeElement, 'z-index', 31);
-      this.renderer2.setStyle(this.menuBars.nativeElement, 'z-index', 40);
-      this.renderer2.setStyle(this.menuClose.nativeElement, 'z-index', 41);
+
+      // Animate container
+      this.renderer2.setStyle(
+        this.menuContainerElem.nativeElement,
+        'transform',
+        'translateX(0)'
+      );
+
+      // Swap z-index of menu buttons
+      this.renderer2.setStyle(this.menuBarsElem.nativeElement, 'z-index', 51);
+      this.renderer2.setStyle(this.menuCloseElem.nativeElement, 'z-index', 52);
+
+      // Animate navigation items
+      const navigationItems = this.navigationItemElems.toArray();
+      setTimeout(() => {
+        for (let i = 0; i < navigationItems.length; i++) {
+          setTimeout(() => {
+            this.renderer2.setStyle(
+              navigationItems[i].nativeElement,
+              'transform',
+              'translateX(0)'
+            );
+            this.renderer2.setStyle(
+              navigationItems[i].nativeElement,
+              'opacity',
+              1
+            );
+          }, (i + 1) * 350);
+        }
+      }, 250);
+
+      // Fade in search input and info elements
+      setTimeout(() => {
+        this.renderer2.setStyle(
+          this.copyrightElem.nativeElement,
+          'opacity',
+          0.5
+        );
+        this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 1);
+        this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 1);
+      }, 1000);
     }
   }
 

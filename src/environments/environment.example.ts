@@ -2,6 +2,7 @@ export const environment = {
   production: false,
   apiKey: '',
   apiUrl: '',
+  about: '',
   copyright: '',
   social: {
     facebook: '',
