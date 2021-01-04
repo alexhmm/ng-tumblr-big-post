@@ -1,173 +1,102 @@
-<div
-  class="menu-bars"
-  #menuBars
-  [ngStyle]="{
-    opacity: stateMenu ? 0 : 1
-  }"
-  (click)="onMenuOpen()"
->
-  <div
-    [ngStyle]="{
-      transform: stateMenu ? 'translateY(0%)' : 'translateY(-100%)'
-    }"
-    class="menu-bars-line-1"
-  ></div>
-  <div
-    [ngStyle]="{
-      transform: stateMenu ? 'translateY(0%)' : 'translateY(100%)'
-    }"
-    class="menu-bars-line-2"
-  ></div>
-</div>
+<section #menuIconElem class="menu-icon" (click)="onMenuToggle()">
+  <div class="menu-icon-line-1"></div>
+  <div class="menu-icon-line-2"></div>
+</section>
 
-<div
-  class="menu-close"
-  #menuClose
-  [ngStyle]="{
-    opacity: stateMenu ? 1 : 0
-  }"
-  (click)="onMenuClose()"
->
-  <div
-    [ngStyle]="{
-      transform: stateMenu ? 'rotate(45deg)' : 'rotate(0deg)'
-    }"
-    class="menu-close-line-1"
-  ></div>
-  <div
-    [ngStyle]="{
-      transform: stateMenu ? 'rotate(-45deg)' : 'rotate(0deg)'
-    }"
-    class="menu-close-line-2"
-  ></div>
-</div>
-
-<section
-  #menuContainer
-  [ngStyle]="
-    stateMenu
-      ? {
-          opacity: '1'
-        }
-      : {
-          opacity: '0'
-        }
-  "
-  class="menu-container"
->
-  <div class="menu-container-navigation">
-    <section
-      [ngStyle]="
-        stateMenu
-          ? {
-              opacity: '1',
-              transform: 'translateY(0)'
-            }
-          : {
-              opacity: '0',
-              transform: 'translateY(4px)'
-            }
-      "
-      class="menu-container-navigation-items"
+<main #menuContainerElem class="menu-container">
+  <section class="menu-container-navigation">
+    <div #navigationItemElem class="menu-container-navigation-item">
+      <a
+        [routerLink]="['']"
+        (click)="onMenuToggle()"
+        class="menu-container-navigation-item-href"
+        >Home</a
+      >
+    </div>
+    <div
+      *ngIf="about"
+      #navigationItemElem
+      class="menu-container-navigation-item"
     >
+      <a
+        [routerLink]="['info', 'about']"
+        (click)="onMenuToggle()"
+        class="menu-container-navigation-item-href"
+        >About</a
+      >
+    </div>
+    <div #navigationItemElem class="menu-container-navigation-item">
       <a
         [routerLink]="['/archive']"
         target="_blank"
-        class="menu-container-navigation-items-link"
+        class="menu-container-navigation-item-href"
         >Archive</a
       >
-    </section>
-    <form
-      [formGroup]="searchForm"
-      (submit)="onSearch()"
-      [ngStyle]="
-        stateMenu
-          ? {
-              opacity: '1',
-              transform: 'translateY(0)'
-            }
-          : {
-              opacity: '0',
-              transform: 'translateY(4px)'
-            }
-      "
-      class="menu-container-navigation-search"
-    >
-      <input placeholder="Search" type="text" formControlName="search" />
-    </form>
-    <section
-      *ngIf="social"
-      [ngStyle]="
-        stateMenu
-          ? {
-              opacity: '1',
-              transform: 'translateY(0)'
-            }
-          : {
-              opacity: '0',
-              transform: 'translateY(4px)'
-            }
-      "
-      class="menu-container-navigation-social"
-    >
-      <a
-        *ngIf="social?.facebook && social.facebook !== ''"
-        [href]="'https://www.facebook.com/' + social.facebook"
-        target="_blank"
-        class="menu-container-navigation-social-item"
-        >Facebook</a
-      >
-      <a
-        *ngIf="social?.instagram && social.instagram !== ''"
-        [href]="'https://instagram.com/' + social.instagram"
-        target="_blank"
-        class="menu-container-navigation-social-item"
-        >Instagram</a
-      >
-      <a
-        *ngIf="social?.snapchat && social.snapshot !== ''"
-        [href]="'https://story.snapchat.com/s/' + social.snapchat"
-        target="_blank"
-        class="menu-container-navigation-social-item"
-        >Snapchat</a
-      >
-      <a
-        *ngIf="social?.tiktok && social.tiktok !== ''"
-        [href]="'https://www.tiktok.com/@' + social.tiktok"
-        target="_blank"
-        class="menu-container-navigation-social-item"
-        >TikTok</a
-      >
-      <a
-        *ngIf="social?.twitch && social.twitch !== ''"
-        [href]="'https://www.twitch.tv/' + social.twitch"
-        target="_blank"
-        class="menu-container-navigation-social-item"
-        >Twitch</a
-      >
-      <a
-        *ngIf="social?.twitter && social.twitter !== ''"
-        [href]="'https://twitter.com/' + social.twitter"
-        target="_blank"
-        class="menu-container-navigation-social-item"
-        >Twitter</a
-      >
-    </section>
-  </div>
-  <div
-    [ngStyle]="
-      stateMenu
-        ? {
-            opacity: '0.5',
-            transform: 'translateY(0)'
-          }
-        : {
-            opacity: '0',
-            transform: 'translateY(4px)'
-          }
-    "
-    class="menu-container-copyright"
+    </div>
+  </section>
+
+  <form
+    #searchElem
+    [formGroup]="searchForm"
+    (submit)="onSearch()"
+    class="menu-container-search"
   >
+    <input placeholder="Search" type="text" formControlName="search" />
+  </form>
+
+  <section #socialElem *ngIf="social" class="menu-container-social">
+    <a
+      *ngIf="social?.facebook && social.facebook !== ''"
+      [href]="'https://www.facebook.com/' + social.facebook"
+      target="_blank"
+      class="menu-container-social-item"
+      >Facebook</a
+    >
+    <a
+      *ngIf="social?.github && social.github !== ''"
+      [href]="'https://github.com/' + social.github"
+      target="_blank"
+      class="menu-container-social-item"
+      >Github</a
+    >
+    <a
+      *ngIf="social?.instagram && social.instagram !== ''"
+      [href]="'https://instagram.com/' + social.instagram"
+      target="_blank"
+      class="menu-container-social-item"
+      >Instagram</a
+    >
+    <a
+      *ngIf="social?.snapchat && social.snapshot !== ''"
+      [href]="'https://story.snapchat.com/s/' + social.snapchat"
+      target="_blank"
+      class="menu-container-social-item"
+      >Snapchat</a
+    >
+    <a
+      *ngIf="social?.tiktok && social.tiktok !== ''"
+      [href]="'https://www.tiktok.com/@' + social.tiktok"
+      target="_blank"
+      class="menu-container-social-item"
+      >TikTok</a
+    >
+    <a
+      *ngIf="social?.twitch && social.twitch !== ''"
+      [href]="'https://www.twitch.tv/' + social.twitch"
+      target="_blank"
+      class="menu-container-social-item"
+      >Twitch</a
+    >
+    <a
+      *ngIf="social?.twitter && social.twitter !== ''"
+      [href]="'https://twitter.com/' + social.twitter"
+      target="_blank"
+      class="menu-container-social-item"
+      >Twitter</a
+    >
+  </section>
+
+  <section #copyrightElem class="menu-container-copyright">
     {{ copyright }}
-  </div>
-</section>
+  </section>
+</main>

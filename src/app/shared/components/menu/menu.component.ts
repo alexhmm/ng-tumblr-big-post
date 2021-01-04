@@ -2,13 +2,16 @@ import {
   Component,
   ElementRef,
   OnInit,
+  QueryList,
   Renderer2,
-  ViewChild
+  ViewChild,
+  ViewChildren
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { environment } from 'src/environments/environment';
+import { AppService } from '../../services/app.service';
 
 @Component({
   selector: 'app-menu',
@@ -17,24 +20,56 @@ import { environment } from 'src/environments/environment';
 })
 export class MenuComponent implements OnInit {
   /**
+   * About
+   */
+  about = environment.about;
+
+  /**
    * Copyright text
    */
   copyright = environment.copyright;
 
   /**
+   * Copyright
+   */
+  @ViewChild('copyrightElem') copyrightElem: ElementRef;
+
+  /**
    * Menu bars icon
    */
-  @ViewChild('menuBars') menuBars: ElementRef;
+  @ViewChild('menuBarsElem') menuBarsElem: ElementRef;
 
   /**
    * Menu close icon
    */
-  @ViewChild('menuClose') menuClose: ElementRef;
+  @ViewChild('menuCloseElem') menuCloseElem: ElementRef;
 
   /**
    * Menu container
    */
-  @ViewChild('menuContainer') menuContainer: ElementRef;
+  @ViewChild('menuContainerElem') menuContainerElem: ElementRef;
+
+  /**
+   * Menu item
+   */
+  @ViewChild('menuIconElem') menuIconElem: ElementRef;
+
+  /**
+   * Navigation items
+   */
+  @ViewChildren('navigationItemElem') navigationItemElems!: QueryList<
+    ElementRef
+  >;
+
+  /**
+   * Search
+   */
+  @ViewChild('searchElem') searchElem: ElementRef;
+
+  /**
+   * Social links
+   */
+  @ViewChild('socialElem') socialElem: ElementRef;
 
   /**
    * SearchForm FormGroup
@@ -53,7 +88,11 @@ export class MenuComponent implements OnInit {
    */
   stateMenu = false;
 
-  constructor(private renderer2: Renderer2, private router: Router) {}
+  constructor(
+    private renderer2: Renderer2,
+    private router: Router,
+    private appService: AppService
+  ) {}
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
@@ -61,33 +100,110 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {}
 
   /**
-   * Handler on closing menu.
+   * Handler to close menu.
    */
   onMenuClose(): void {
-    if (this.stateMenu) {
-      this.stateMenu = false;
-      this.renderer2.setStyle(this.menuClose.nativeElement, 'z-index', 40);
-      this.renderer2.setStyle(this.menuBars.nativeElement, 'z-index', 41);
-      // Wait for menu container to fade out
-      setTimeout(() => {
+    this.stateMenu = false;
+
+    // Animate container
+    this.renderer2.setStyle(
+      this.menuContainerElem.nativeElement,
+      'transform',
+      'translateX(100%)'
+    );
+
+    // Animate menu icon
+    this.renderer2.setStyle(
+      this.menuIconElem.nativeElement.children[0],
+      'transform',
+      'rotate(0deg) translateY(-150%)'
+    );
+    this.renderer2.setStyle(
+      this.menuIconElem.nativeElement.children[1],
+      'transform',
+      'rotate(0deg) translateY(150%)'
+    );
+
+    // Wait for menu container to fade out
+    setTimeout(() => {
+      // Animate navigation items
+      const navigationItems = this.navigationItemElems.toArray();
+      for (const navigationItem of navigationItems) {
         this.renderer2.setStyle(
-          this.menuContainer.nativeElement,
-          'z-index',
-          -1
+          navigationItem.nativeElement,
+          'transform',
+          'translateX(100%)'
         );
-      }, 500);
-    }
+        this.renderer2.setStyle(navigationItem.nativeElement, 'opacity', 0);
+      }
+
+      // Unset opacity of search input and info elements
+      this.renderer2.setStyle(this.copyrightElem.nativeElement, 'opacity', 0);
+      this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 0);
+      this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 0);
+    }, 500);
   }
 
   /**
-   * Handler on opening menu.
+   * Handler to open menu.
    */
   onMenuOpen(): void {
+    this.stateMenu = true;
+
+    // Animate container
+    this.renderer2.setStyle(
+      this.menuContainerElem.nativeElement,
+      'transform',
+      'translateX(0)'
+    );
+
+    // Animate menu icon
+    this.renderer2.setStyle(
+      this.menuIconElem.nativeElement.children[0],
+      'transform',
+      'rotate(45deg) translateY(0%)'
+    );
+    this.renderer2.setStyle(
+      this.menuIconElem.nativeElement.children[1],
+      'transform',
+      'rotate(-45deg) translateY(0%)'
+    );
+
+    // Animate navigation items
+    const navigationItems = this.navigationItemElems.toArray();
+    setTimeout(() => {
+      for (let i = 0; i < navigationItems.length; i++) {
+        setTimeout(() => {
+          this.renderer2.setStyle(
+            navigationItems[i].nativeElement,
+            'transform',
+            'translateX(0)'
+          );
+          this.renderer2.setStyle(
+            navigationItems[i].nativeElement,
+            'opacity',
+            1
+          );
+        }, (i + 1) * 350);
+      }
+    }, 250);
+
+    // Fade in search input and info elements
+    setTimeout(() => {
+      this.renderer2.setStyle(this.copyrightElem.nativeElement, 'opacity', 0.5);
+      this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 1);
+      this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 1);
+    }, 1000);
+  }
+
+  /**
+   * Handler to toggle menu.
+   */
+  onMenuToggle(): void {
     if (!this.stateMenu) {
-      this.stateMenu = true;
-      this.renderer2.setStyle(this.menuContainer.nativeElement, 'z-index', 31);
-      this.renderer2.setStyle(this.menuBars.nativeElement, 'z-index', 40);
-      this.renderer2.setStyle(this.menuClose.nativeElement, 'z-index', 41);
+      this.onMenuOpen();
+    } else {
+      this.onMenuClose();
     }
   }
 

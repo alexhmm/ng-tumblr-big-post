@@ -3,141 +3,157 @@
 @import '../../../../styles/theme.scss';
 
 .menu {
-  &-bars {
-    @include transition(1s, 0s, ease-in-out, opacity);
-    align-items: center;
-    display: flex;
-    height: 1.75rem;
-    right: 12px;
-    opacity: 1;
-    position: fixed;
-    top: 12px;
-    z-index: 41;
-    width: 1.75rem;
-    &-line-1 {
-      @include transition(0.35s, 0s, ease-in-out, background-color, transform);
-      background-color: $light-color;
-      position: absolute;
-      height: 0.15em;
-      width: 100%;
-    }
-    &-line-2 {
-      background-color: $light-color;
-      position: absolute;
-      height: 0.15em;
-      top: 50%;
-      width: 100%;
-      @include transition(0.35s, 0s, ease-in-out, background-color, transform);
-    }
-  }
-  &-close {
-    @include transition(1s, 0s, ease-in-out, opacity);
-    align-items: center;
-    display: flex;
-    height: 1.75rem;
-    justify-content: center;
-    right: 12px;
-    opacity: 0;
-    position: fixed;
-    top: 12px;
-    z-index: 40;
-    width: 1.75rem;
-    &-line-1 {
-      @include transition(0.75s, 0s, ease-in-out, background-color, transform);
-      background-color: $light-color;
-      position: absolute;
-      height: 0.15em;
-      transform: rotate(45deg);
-      width: 90%;
-    }
-    &-line-2 {
-      @include transition(0.75s, 0s, ease-in-out, background-color, transform);
-      background-color: $light-color;
-      position: absolute;
-      height: 0.15em;
-      transform: rotate(-45deg);
-      width: 90%;
-    }
-  }
   &-container {
-    @include transition(0.5s, 0s, ease-in-out, opacity);
+    @include transition(0.5s, 0s, ease-out, transform);
     background-color: $light-menu-background-color;
+    display: flex;
     height: 100%;
     left: 0;
-    opacity: 1;
     position: fixed;
     top: 0;
+    transform: translateX(100%);
     width: 100%;
-    z-index: -1;
+    z-index: 50;
     &-copyright {
-      @include transition(0.5s, 2s, ease-in-out, opacity, transform);
-      bottom: 16px;
+      @include transition(0.5s, 0s, ease-out, opacity, transform);
+      bottom: 32px;
+      color: $light-color;
       display: flex;
       font-size: 0.8rem;
       justify-content: center;
+      opacity: 0;
       position: fixed;
       width: 100%;
     }
     &-navigation {
-      align-items: center;
+      align-items: flex-end;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      font-size: 3rem;
+      overflow: hidden;
+      position: fixed;
+      right: 64px;
+      top: 96px;
+      width: max-content;
+      &-item {
+        @include transition(0.5s, 0s, ease-out, opacity, transform);
+        color: $light-color;
+        opacity: 0;
+        transform: translateX(100%);
+      }
+    }
+    &-search {
+      @include transition(0.5s, 0s, ease-out, opacity, transform);
+      top: 12px;
+      box-sizing: border-box;
+      display: flex;
       justify-content: center;
-      width: 100%;
-      &-items {
-        @include transition(0.5s, 0.5s, ease-in-out, opacity, transform);
-        display: flex;
-        flex-direction: column;
-        font-size: 2rem;
-        opacity: 0;
-        &-link {
-          padding: 8px 0px;
-        }
-      }
-      &-search {
-        @include transition(0.5s, 1s, ease-in-out, opacity, transform);
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-        padding: 16px 16px 48px 16px;
+      left: 16px;
+      opacity: 0;
+      position: fixed;
+      width: calc(100% - 72px);
+      & input {
+        border-bottom: 1px solid $light-color;
+        color: $light-color;
+        padding: 4px 0px;
         width: 100%;
-        & input {
-          border-bottom: 1px solid $light-color;
-          padding: 4px 0px;
-          width: 100%;
-        }
       }
-      &-social {
-        @include transition(0.5s, 1.5s, ease-in-out, opacity, transform);
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        opacity: 0;
-        &-item {
-          padding: 8px;
-        }
+    }
+    &-social {
+      @include transition(0.5s, 0s, ease-out, opacity, transform);
+      bottom: 96px;
+      color: $light-color;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      position: fixed;
+      width: 100%;
+      &-item {
+        padding: 8px;
       }
+    }
+  }
+  &-icon {
+    @include transition(1s, 0s, ease-in-out, opacity);
+    align-items: center;
+    display: flex;
+    height: 1.75rem;
+    right: 12px;
+    opacity: 1;
+    position: fixed;
+    top: 12px;
+    z-index: 52;
+    width: 1.75rem;
+    &-line-1 {
+      @include transition(0.5s, 0s, ease-out, background-color, transform);
+      background-color: $light-color;
+      position: absolute;
+      height: 0.15em;
+      transform: translateY(-150%);
+      width: 100%;
+    }
+    &-line-2 {
+      @include transition(0.5s, 0s, ease-out, background-color, transform);
+      background-color: $light-color;
+      position: absolute;
+      height: 0.15em;
+      transform: translateY(150%);
+      width: 100%;
     }
   }
 }
 
 @media (min-width: $sm) {
   .menu {
-    &-bars,
-    &-close {
+    &-icon {
       right: 28px;
       top: 28px;
     }
     &-container {
+      justify-content: center;
       &-copyright {
-        bottom: 32px;
+        bottom: 64px;
       }
+      &-search {
+        left: unset;
+        top: 28px;
+        width: 420px;
+      }
+      &-social {
+        bottom: 128px;
+        width: 420px;
+      }
+    }
+  }
+}
+
+@media (min-width: $md) {
+  .menu {
+    &-container {
       &-navigation {
-        &-search {
-          padding: 32px 0px 64px 0px;
-          width: 420px;
+        font-size: 4rem;
+        right: 96px;
+        top: 128px;
+      }
+      &-search {
+        & input {
+          border-bottom: 2px solid $light-color;
+          font-size: 1.5rem;
         }
+      }
+      &-social {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
+@media (min-width: $lg) {
+  .menu {
+    &-container {
+      &-navigation {
+        font-size: 5rem;
       }
     }
   }
@@ -145,8 +161,7 @@
 
 @media (min-width: $xl) {
   .menu {
-    &-bars,
-    &-close {
+    &-icon {
       right: 44px;
       top: 60px;
     }
@@ -155,16 +170,15 @@
         bottom: 64px;
       }
       &-navigation {
-        &-items {
-          font-size: 3rem;
-        }
-        &-search {
-          padding: 64px 0px 128px 0px;
-          & input {
-            border-bottom: 2px solid $light-color;
-            font-size: 1.5rem;
-          }
-        }
+        font-size: 6rem;
+        right: 128px;
+        top: 156px;
+      }
+      &-search {
+        top: 60px;
+      }
+      &-social {
+        bottom: 156px;
       }
     }
   }
@@ -172,8 +186,7 @@
 
 @media (min-width: $fhd) {
   .menu {
-    &-bars,
-    &-close {
+    &-icon {
       height: 2.25rem;
       width: 2.25rem;
     }
@@ -182,40 +195,33 @@
 
 @media (hover: hover) {
   .menu {
-    &-bars {
+    &-icon {
       cursor: pointer;
       &:hover {
-        & .menu-bars-line-1,
-        .menu-bars-line-2 {
-          background-color: $light-color-hover;
-        }
-      }
-    }
-    &-close {
-      cursor: pointer;
-      &:hover {
-        & .menu-close-line-1,
-        .menu-close-line-2 {
+        & .menu-icon-line-1,
+        .menu-icon-line-2 {
           background-color: $light-color-hover;
         }
       }
     }
     &-container {
       &-navigation {
-        &-items {
+        &-item {
           a {
-            @include transition(0.25s, 0s, ease-in-out, color);
-            &:hover {
+            @include transition(0.25s, 0s, ease-out, color);
+          }
+          &:hover {
+            a {
               color: $light-color-hover;
             }
           }
         }
-        &-social {
-          a {
-            @include transition(0.25s, 0s, ease-in-out, color);
-            &:hover {
-              color: $light-color-hover;
-            }
+      }
+      &-social {
+        a {
+          @include transition(0.25s, 0s, ease-out, color);
+          &:hover {
+            color: $light-color-hover;
           }
         }
       }

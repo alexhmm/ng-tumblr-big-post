@@ -4,20 +4,34 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 
+// App modules
+import { InfoModule } from './info/info.module';
+import { PostsModule } from './posts/posts.module';
+
 // App component
 import { AppComponent } from './app.component';
-
-// App modules
-import { PostsModule } from './posts/posts.module';
 import { SharedModule } from './shared/shared.module';
 
 /**
  * App routes
  */
 const routes: Routes = [
+  // Lazy loading not correctly working with Tumblr
+  // {
+  //   path: '',
+  //   loadChildren: () => import('./posts/posts.module').then(m => m.PostsModule)
+  // },
+  // {
+  //   path: 'info',
+  //   loadChildren: () => import('./info/info.module').then(m => m.InfoModule)
+  // }
   {
     path: '',
-    loadChildren: () => import('./posts/posts.module').then(m => m.PostsModule)
+    loadChildren: () => PostsModule
+  },
+  {
+    path: 'info',
+    loadChildren: () => InfoModule
   }
 ];
 
@@ -27,8 +41,7 @@ const routes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    PostsModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
     SharedModule
   ],
   providers: [],

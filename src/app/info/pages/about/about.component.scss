@@ -1,0 +1,36 @@
+@import '../../../../styles/breakpoints.scss';
+@import '../../../../styles/mixins.scss';
+@import '../../../../styles/theme.scss';
+
+:host {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.about {
+  align-items: center;
+  background-color: $light-background-color;
+  display: flex;
+  justify-content: center;
+  max-height: 60vh;
+  max-width: calc(100% - 32px);
+}
+
+@media (min-width: $sm) {
+  .about {
+    max-height: 70vh;
+    max-width: calc(100% - 64px);
+  }
+}
+
+@media (min-width: $md) {
+  .about {
+    max-width: 640px;
+  }
+}

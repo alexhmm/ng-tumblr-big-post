@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
+
+import { SharedModule } from '../shared/shared.module';
 
 // Module pages
 import { PostsComponent } from './pages/posts/posts.component';
@@ -10,7 +13,6 @@ import { PostPhotoComponent } from './components/post-photo/post-photo.component
 
 // Module services
 import { PostsService } from './services/posts.service';
-import { HttpClientModule } from '@angular/common/http';
 
 /**
  * Module routes
@@ -44,7 +46,12 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [PostsComponent, PostPhotoComponent],
-  imports: [CommonModule, HttpClientModule, RouterModule.forChild(routes)],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    RouterModule.forChild(routes),
+    SharedModule
+  ],
   providers: [PostsService]
 })
 export class PostsModule {}
