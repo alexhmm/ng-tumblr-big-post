@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import * as moment from 'moment';
+import { AppService } from 'src/app/shared/services/app.service';
 
 import { Post } from 'src/app/posts/models/post.interface';
 import { PostsService } from 'src/app/posts/services/posts.service';
@@ -70,10 +70,12 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * PostsComponent constructor
    * @param route ActivatedRoute
+   * @param appService AppService
    * @param postsService PostsService
    */
   constructor(
     private route: ActivatedRoute,
+    private appService: AppService,
     private postsService: PostsService
   ) {}
 
@@ -109,7 +111,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Inits subscription on current index
    */
   initSubscriptionCurrentIndex(): void {
-    this.postsService.currentIndex
+    this.appService.currentIndex
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(currentIndex => {
         this.oldIndex = this.currentIndex;
@@ -121,7 +123,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Subscription on posts loaded and current index.
    */
   initSubscriptionPostsLoadedCurrentIndex(): void {
-    combineLatest(this.postsService.postsLoaded, this.postsService.currentIndex)
+    combineLatest(this.postsService.postsLoaded, this.appService.currentIndex)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(postsLoadedCurrentIndex => {
         // Check if current index is loaded
@@ -148,13 +150,6 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(posts => {
         if (posts) {
-          // const mapPosts = [];
-          // for (const post of posts) {
-          //   const mapPost = post;
-          //   mapPost.date = moment(post.date.substr(0, 10)).format('LL');
-          //   mapPosts.push(mapPost);
-          // }
-          // this.posts = mapPosts;
           this.posts = posts;
         }
       });
@@ -215,9 +210,9 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // Set counter visibility on single posts
       if (params.postId) {
-        this.postsService.setCounterVisibility(false);
+        this.appService.setStateCounter(false);
       } else {
-        this.postsService.setCounterVisibility(true);
+        this.appService.setStateCounter(true);
       }
     });
   }
@@ -235,7 +230,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Inits subscription on total posts count.
    */
   initSubscriptionTotalPosts(): void {
-    this.postsService.totalPosts
+    this.appService.totalPosts
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(totalPosts => {
         this.totalPosts = totalPosts;

@@ -10,6 +10,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { AppService } from 'src/app/shared/services/app.service';
+
 import { Post } from '../../models/post.interface';
 import { PostsService } from '../../services/posts.service';
 
@@ -66,6 +68,7 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
    * PostPhotoComponent constructor.
    */
   constructor(
+    private appService: AppService,
     private postsService: PostsService,
     private route: ActivatedRoute
   ) {}
@@ -107,7 +110,7 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
    * Inits subscription on current index.
    */
   initSubscriptionCurrentIndex(): void {
-    this.postsService.currentIndex
+    this.appService.currentIndex
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(currentIndex => {
         this.currentIndex = currentIndex;

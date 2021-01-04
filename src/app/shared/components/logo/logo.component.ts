@@ -3,6 +3,8 @@ import { take } from 'rxjs/operators';
 
 import { fadeInOut } from '../../services/animations';
 
+import { AppService } from '../../services/app.service';
+
 import { PostsService } from 'src/app/posts/services/posts.service';
 
 @Component({
@@ -17,7 +19,10 @@ export class LogoComponent implements OnInit {
    */
   title: string;
 
-  constructor(private postsService: PostsService) {}
+  constructor(
+    private appService: AppService,
+    private postsService: PostsService
+  ) {}
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
@@ -30,7 +35,7 @@ export class LogoComponent implements OnInit {
    * Inits subscription on posts. Formats date.
    */
   initSubscriptionTitle(): void {
-    this.postsService.title.pipe(take(2)).subscribe(title => {
+    this.appService.title.pipe(take(2)).subscribe(title => {
       if (title) {
         this.title = title;
       }

@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 
 import { fadeInOut } from '../../services/animations';
 
-import { PostsService } from 'src/app/posts/services/posts.service';
+import { AppService } from '../../services/app.service';
 
 @Component({
   selector: 'app-footer',
@@ -26,6 +26,11 @@ export class FooterComponent implements OnInit, OnDestroy {
   currentIndex: number;
 
   /**
+   * Counter state
+   */
+  stateCounter: boolean;
+
+  /**
    * Totol posts count
    */
   totalPosts: number;
@@ -35,18 +40,13 @@ export class FooterComponent implements OnInit, OnDestroy {
    */
   unsubscribe$ = new Subject();
 
-  /**
-   * Visible container
-   */
-  visibility: boolean;
-
-  constructor(private postsService: PostsService) {}
+  constructor(private appService: AppService) {}
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
    */
   ngOnInit(): void {
-    this.initSubscriptionCounterVisibility();
+    this.initSubscriptionStateCounter();
     this.initSubscriptionCurrentIndex();
     this.initSubscriptionTotalPosts();
   }
@@ -63,7 +63,7 @@ export class FooterComponent implements OnInit, OnDestroy {
    * Inits subscription on current index.
    */
   initSubscriptionCurrentIndex(): void {
-    this.postsService.currentIndex
+    this.appService.currentIndex
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(currentIndex => {
         this.currentIndex = currentIndex;
@@ -73,11 +73,11 @@ export class FooterComponent implements OnInit, OnDestroy {
   /**
    * Subscription on route params.
    */
-  initSubscriptionCounterVisibility(): void {
-    this.postsService.counterVisibilitySrc
+  initSubscriptionStateCounter(): void {
+    this.appService.stateCounter
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(visibility => {
-        this.visibility = visibility;
+      .subscribe(stateCounter => {
+        this.stateCounter = stateCounter;
       });
   }
 
@@ -85,7 +85,7 @@ export class FooterComponent implements OnInit, OnDestroy {
    * Inits subscription on total posts count.
    */
   initSubscriptionTotalPosts(): void {
-    this.postsService.totalPosts
+    this.appService.totalPosts
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(totalPosts => {
         this.totalPosts = totalPosts;

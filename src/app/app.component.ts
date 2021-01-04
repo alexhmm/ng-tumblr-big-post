@@ -1,4 +1,6 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
+
+import { AppService } from './shared/services/app.service';
 import { PostsService } from './posts/services/posts.service';
 
 @Component({
@@ -22,6 +24,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private renderer2: Renderer2,
+    private appService: AppService,
     private postsService: PostsService
   ) {}
 
@@ -42,11 +45,11 @@ export class AppComponent implements OnInit {
         this.mousewheelUsed = true;
         if (event.deltaY > 0) {
           this.postsService.setNextIndex(
-            this.postsService.currentIndexSrc.value + 1
+            this.appService.currentIndexSrc.value + 1
           );
         } else if (event.deltaY < 0) {
           this.postsService.setPreviousIndex(
-            this.postsService.currentIndexSrc.value - 1
+            this.appService.currentIndexSrc.value - 1
           );
         }
         // Wait for photo swap
@@ -63,11 +66,11 @@ export class AppComponent implements OnInit {
         this.keyUsed = true;
         if (event.keyCode === 37) {
           this.postsService.setPreviousIndex(
-            this.postsService.currentIndexSrc.value - 1
+            this.appService.currentIndexSrc.value - 1
           );
         } else if (event.keyCode === 39) {
           this.postsService.setNextIndex(
-            this.postsService.currentIndexSrc.value + 1
+            this.appService.currentIndexSrc.value + 1
           );
         }
         // Wait for photo swap
@@ -77,10 +80,4 @@ export class AppComponent implements OnInit {
       }
     });
   }
-  // @HostListener('document:mousemove', ['$event'])
-  // onMouseMove(event): void {
-  //   // console.log(event);
-  //   this.clientX = event.clientX;
-  //   this.clientY = event.clientY;
-  // }
 }

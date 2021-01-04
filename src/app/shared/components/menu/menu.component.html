@@ -7,9 +7,20 @@
   <section class="menu-container-navigation">
     <div #navigationItemElem class="menu-container-navigation-item">
       <a
-        *ngIf="about"
-        [routerLink]="['/about']"
-        target="_blank"
+        [routerLink]="['']"
+        (click)="onMenuToggle()"
+        class="menu-container-navigation-item-href"
+        >Home</a
+      >
+    </div>
+    <div
+      *ngIf="about"
+      #navigationItemElem
+      class="menu-container-navigation-item"
+    >
+      <a
+        [routerLink]="['info', 'about']"
+        (click)="onMenuToggle()"
         class="menu-container-navigation-item-href"
         >About</a
       >
