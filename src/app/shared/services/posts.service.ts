@@ -14,7 +14,7 @@ import { Post } from 'src/app/posts/models/post.interface';
 export class PostsService {
   currentIndexSrc = new BehaviorSubject<number>(null);
   currentIndex = this.currentIndexSrc.asObservable();
-  limit = 4;
+  limit = 20;
   offsetSrc = new BehaviorSubject<number>(null);
   offset = this.offsetSrc.asObservable();
   stateCounterSrc = new BehaviorSubject<boolean>(false);

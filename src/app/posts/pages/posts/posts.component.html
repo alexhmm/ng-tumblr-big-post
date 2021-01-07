@@ -1,6 +1,9 @@
 <section class="posts">
-  <div class="posts-loading">
-    <div [ngStyle]="{ opacity: stateLoading ? 0.5 : 0 }" class="loader"></div>
+  <div *ngIf="stateLoading" class="posts-loading" @fadeInOut>
+    <div class="spinner">
+      <div class="double-bounce1"></div>
+      <div class="double-bounce2"></div>
+    </div>
   </div>
   <app-post-photo
     *ngFor="let post of posts; let i = index"
