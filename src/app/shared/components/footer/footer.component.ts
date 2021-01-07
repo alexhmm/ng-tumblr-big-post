@@ -5,8 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 import { fadeInOut } from '../../services/animations';
-
-import { AppService } from '../../services/app.service';
+import { PostsService } from '../../services/posts.service';
 
 @Component({
   selector: 'app-footer',
@@ -40,7 +39,7 @@ export class FooterComponent implements OnInit, OnDestroy {
    */
   unsubscribe$ = new Subject();
 
-  constructor(private appService: AppService) {}
+  constructor(private postsService: PostsService) {}
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
@@ -63,7 +62,7 @@ export class FooterComponent implements OnInit, OnDestroy {
    * Inits subscription on current index.
    */
   initSubscriptionCurrentIndex(): void {
-    this.appService.currentIndex
+    this.postsService.currentIndex
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(currentIndex => {
         this.currentIndex = currentIndex;
@@ -74,7 +73,7 @@ export class FooterComponent implements OnInit, OnDestroy {
    * Subscription on route params.
    */
   initSubscriptionStateCounter(): void {
-    this.appService.stateCounter
+    this.postsService.stateCounter
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(stateCounter => {
         this.stateCounter = stateCounter;
@@ -85,7 +84,7 @@ export class FooterComponent implements OnInit, OnDestroy {
    * Inits subscription on total posts count.
    */
   initSubscriptionTotalPosts(): void {
-    this.appService.totalPosts
+    this.postsService.totalPosts
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(totalPosts => {
         this.totalPosts = totalPosts;

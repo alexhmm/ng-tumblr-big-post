@@ -1,7 +1,6 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 
-import { AppService } from './shared/services/app.service';
-import { PostsService } from './posts/services/posts.service';
+import { PostsService } from './shared/services/posts.service';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +23,6 @@ export class AppComponent implements OnInit {
 
   constructor(
     private renderer2: Renderer2,
-    private appService: AppService,
     private postsService: PostsService
   ) {}
 
@@ -37,7 +35,7 @@ export class AppComponent implements OnInit {
   }
 
   /**
-   * Sets up listener on wheel use.
+   * Listener on wheel use.
    */
   onMousewheelUse(): void {
     this.renderer2.listen('document', 'wheel', event => {
@@ -45,11 +43,11 @@ export class AppComponent implements OnInit {
         this.mousewheelUsed = true;
         if (event.deltaY > 0) {
           this.postsService.setNextIndex(
-            this.appService.currentIndexSrc.value + 1
+            this.postsService.currentIndexSrc.value + 1
           );
         } else if (event.deltaY < 0) {
           this.postsService.setPreviousIndex(
-            this.appService.currentIndexSrc.value - 1
+            this.postsService.currentIndexSrc.value - 1
           );
         }
         // Wait for photo swap
@@ -60,17 +58,20 @@ export class AppComponent implements OnInit {
     });
   }
 
+  /**
+   * Listener on key use.
+   */
   onKeyUse(): void {
     this.renderer2.listen('document', 'keyup', event => {
       if (!this.keyUsed && !this.mousewheelUsed) {
         this.keyUsed = true;
         if (event.keyCode === 37) {
           this.postsService.setPreviousIndex(
-            this.appService.currentIndexSrc.value - 1
+            this.postsService.currentIndexSrc.value - 1
           );
         } else if (event.keyCode === 39) {
           this.postsService.setNextIndex(
-            this.appService.currentIndexSrc.value + 1
+            this.postsService.currentIndexSrc.value + 1
           );
         }
         // Wait for photo swap

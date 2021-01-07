@@ -11,7 +11,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { environment } from 'src/environments/environment';
-import { AppService } from '../../services/app.service';
 
 @Component({
   selector: 'app-menu',
@@ -88,11 +87,7 @@ export class MenuComponent implements OnInit {
    */
   stateMenu = false;
 
-  constructor(
-    private renderer2: Renderer2,
-    private router: Router,
-    private appService: AppService
-  ) {}
+  constructor(private renderer2: Renderer2, private router: Router) {}
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.

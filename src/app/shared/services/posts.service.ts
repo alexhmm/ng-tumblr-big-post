@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { AppService } from 'src/app/shared/services/app.service';
 
 import { environment } from 'src/environments/environment';
 
-import { Post } from '../models/post.interface';
+import { Post } from 'src/app/posts/models/post.interface';
 
 /**
  * PostsService
@@ -13,9 +12,13 @@ import { Post } from '../models/post.interface';
   providedIn: 'root'
 })
 export class PostsService {
-  limit = 20;
+  currentIndexSrc = new BehaviorSubject<number>(null);
+  currentIndex = this.currentIndexSrc.asObservable();
+  limit = 4;
   offsetSrc = new BehaviorSubject<number>(null);
   offset = this.offsetSrc.asObservable();
+  stateCounterSrc = new BehaviorSubject<boolean>(false);
+  stateCounter = this.stateCounterSrc.asObservable();
   postsSrc = new BehaviorSubject<Post[]>(null);
   posts = this.postsSrc.asObservable();
   postsLoadedSrc = new BehaviorSubject<boolean[]>(null);
@@ -24,11 +27,16 @@ export class PostsService {
   stateLoading = this.stateLoadingSrc.asObservable();
   tagSrc = new BehaviorSubject<string>(null);
   tag = this.tagSrc.asObservable();
+  titleSrc = new BehaviorSubject<string>(null);
+  title = this.titleSrc.asObservable();
+  totalPostsSrc = new BehaviorSubject<number>(null);
+  totalPosts = this.totalPostsSrc.asObservable();
 
   /**
    * PostsService constructor.
    */
-  constructor(private appService: AppService) {}
+  constructor() {}
+
   /**
    * Returns calculated offset by page.
    * @param page Page
@@ -89,12 +97,12 @@ export class PostsService {
             postsLoaded.push(false);
           }
           this.postsLoadedSrc.next(postsLoaded);
-          this.appService.currentIndexSrc.next(offset);
+          this.currentIndexSrc.next(offset);
         } else {
           // Init posts
           this.postsSrc.next(response.response.posts);
-          this.appService.totalPostsSrc.next(response.response.total_posts);
-          this.appService.setTitle(response.response.blog.title);
+          this.totalPostsSrc.next(response.response.total_posts);
+          this.setTitle(response.response.blog.title);
           const postsLoaded = this.postsLoadedSrc.value
             ? [...this.postsLoadedSrc.value]
             : [];
@@ -102,7 +110,7 @@ export class PostsService {
             postsLoaded.push(false);
           }
           this.postsLoadedSrc.next(postsLoaded);
-          this.appService.currentIndexSrc.next(0);
+          this.currentIndexSrc.next(0);
           this.setStateLoading(false);
         }
       }
@@ -144,12 +152,20 @@ export class PostsService {
   }
 
   /**
+   * Sets current index.
+   * @param currentIndex Current index
+   */
+  setCurrentIndex(currentIndex: number): void {
+    this.currentIndexSrc.next(currentIndex);
+  }
+
+  /**
    * Sets previous index
    * @param previousIndex Previous index
    */
   setPreviousIndex(previousIndex: number): void {
     if (previousIndex > -1) {
-      this.appService.setCurrentIndex(previousIndex);
+      this.setCurrentIndex(previousIndex);
     }
   }
 
@@ -158,10 +174,10 @@ export class PostsService {
    * @param nextIndex Next index
    */
   setNextIndex(nextIndex: number): void {
-    if (nextIndex < this.appService.totalPostsSrc.value) {
+    if (nextIndex < this.totalPostsSrc.value) {
       if (
         nextIndex === this.postsSrc.value.length &&
-        this.postsSrc.value.length < this.appService.totalPostsSrc.value
+        this.postsSrc.value.length < this.totalPostsSrc.value
       ) {
         this.getPosts(
           this.limit,
@@ -170,7 +186,7 @@ export class PostsService {
           null
         );
       } else {
-        this.appService.setCurrentIndex(nextIndex);
+        this.setCurrentIndex(nextIndex);
       }
     }
   }
@@ -206,6 +222,14 @@ export class PostsService {
   }
 
   /**
+   * Sets counter state.
+   * @param stateCounter Counter state
+   */
+  setStateCounter(stateCounter: boolean): void {
+    this.stateCounterSrc.next(stateCounter);
+  }
+
+  /**
    * Sets loading state.
    * @param stateLoading State loading
    */
@@ -219,5 +243,21 @@ export class PostsService {
    */
   setTag(tag: string): void {
     this.tagSrc.next(tag);
+  }
+
+  /**
+   * Sets application title.
+   * @param title Title
+   */
+  setTitle(title: string): void {
+    this.titleSrc.next(title);
+  }
+
+  /**
+   * Sets total posts count.
+   * @param totalPosts Total posts
+   */
+  setTotalPosts(totalPosts: number): void {
+    this.totalPostsSrc.next(totalPosts);
   }
 }
