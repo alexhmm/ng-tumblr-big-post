@@ -17,7 +17,7 @@
   bottom: 0;
   color: $light-color;
   display: flex;
-  height: calc((100vh - 400px) / 2);
+  height: 20vh;
   justify-content: center;
   left: 50%;
   opacity: 0;
@@ -29,7 +29,7 @@
 
 @media (min-width: $xs) {
   .counter {
-    height: calc((100vh - 480px) / 2);
+    height: 17.5vh;
   }
 }
 
