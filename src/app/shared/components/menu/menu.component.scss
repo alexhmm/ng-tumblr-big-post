@@ -89,7 +89,7 @@
       @include transition(0.5s, 0s, ease-out, background-color, transform);
       background-color: $light-color;
       position: absolute;
-      height: 0.15em;
+      height: 0.1em;
       transform: translateY(-150%);
       width: 100%;
     }
@@ -97,7 +97,7 @@
       @include transition(0.5s, 0s, ease-out, background-color, transform);
       background-color: $light-color;
       position: absolute;
-      height: 0.15em;
+      height: 0.1em;
       transform: translateY(150%);
       width: 100%;
     }
@@ -106,10 +106,6 @@
 
 @media (min-width: $sm) {
   .menu {
-    &-icon {
-      right: 28px;
-      top: 28px;
-    }
     &-container {
       justify-content: center;
       &-copyright {
@@ -124,6 +120,10 @@
         bottom: 128px;
         width: 420px;
       }
+    }
+    &-icon {
+      right: 28px;
+      top: 28px;
     }
   }
 }
@@ -144,6 +144,14 @@
       }
       &-social {
         font-size: 1.5rem;
+      }
+    }
+    &-icon {
+      &-line-1 {
+        height: 0.15em;
+      }
+      &-line-2 {
+        height: 0.15em;
       }
     }
   }

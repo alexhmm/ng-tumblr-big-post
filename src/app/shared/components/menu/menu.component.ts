@@ -119,24 +119,21 @@ export class MenuComponent implements OnInit {
       'rotate(0deg) translateY(150%)'
     );
 
-    // Wait for menu container to fade out
-    setTimeout(() => {
-      // Animate navigation items
-      const navigationItems = this.navigationItemElems.toArray();
-      for (const navigationItem of navigationItems) {
-        this.renderer2.setStyle(
-          navigationItem.nativeElement,
-          'transform',
-          'translateX(100%)'
-        );
-        this.renderer2.setStyle(navigationItem.nativeElement, 'opacity', 0);
-      }
+    // Animate navigation items
+    const navigationItems = this.navigationItemElems.toArray();
+    for (const navigationItem of navigationItems) {
+      this.renderer2.setStyle(
+        navigationItem.nativeElement,
+        'transform',
+        'translateX(100%)'
+      );
+      this.renderer2.setStyle(navigationItem.nativeElement, 'opacity', 0);
+    }
 
-      // Unset opacity of search input and info elements
-      this.renderer2.setStyle(this.copyrightElem.nativeElement, 'opacity', 0);
-      this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 0);
-      this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 0);
-    }, 500);
+    // Unset opacity of search input and info elements
+    this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 0);
+    this.renderer2.setStyle(this.copyrightElem.nativeElement, 'opacity', 0);
+    this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 0);
   }
 
   /**
