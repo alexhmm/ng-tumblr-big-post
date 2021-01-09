@@ -6,12 +6,13 @@ import {
   OnInit,
   SimpleChanges
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { fadeInOut } from 'src/app/shared/services/animations';
 import { PostsService } from 'src/app/shared/services/posts.service';
+import { environment } from 'src/environments/environment';
 
 import { Post } from '../../models/post.interface';
 
@@ -66,6 +67,11 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   stateLoading: boolean;
 
   /**
+   * Display state for tags
+   */
+  stateTags = environment.state.posts.tags;
+
+  /**
    * Total posts
    */
   totalPosts: number;
@@ -79,8 +85,9 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
    * PostPhotoComponent constructor.
    */
   constructor(
-    private postsService: PostsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+    private postsService: PostsService
   ) {}
 
   /**
@@ -107,6 +114,7 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.postVisible = false;
     }
+    console.log('post', this.post);
   }
 
   /**
@@ -182,5 +190,13 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
    */
   onPreviousPost(): void {
     this.postsService.setPreviousIndex(this.currentIndex - 1);
+  }
+
+  /**
+   * Handler on clicking tag.
+   * @param tag Tag
+   */
+  onTag(tag: string): void {
+    this.router.navigate(['tagged', tag]);
   }
 }

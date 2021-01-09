@@ -24,11 +24,6 @@ export class MenuComponent implements OnInit {
   about = environment.about;
 
   /**
-   * Archive menu item visibility
-   */
-  archive = environment.archive;
-
-  /**
    * Copyright text
    */
   copyright = environment.copyright;
@@ -86,6 +81,11 @@ export class MenuComponent implements OnInit {
    * Social media
    */
   social = environment.social;
+
+  /**
+   * Display state for archive menu item
+   */
+  stateArchive = environment.state.menu.archive;
 
   /**
    * Menu state

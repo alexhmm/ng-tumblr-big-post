@@ -64,14 +64,29 @@
       }
     }
     &-caption {
+      display: flex;
+      flex-wrap: wrap;
+      height: 20px;
       right: 16px;
       overflow: hidden;
       position: absolute;
-      text-overflow: ellipsis;
-      text-transform: uppercase;
       top: -32px;
-      white-space: nowrap;
       width: calc(100% - 32px);
+      &-tag {
+        color: $light-color;
+        margin-left: 8px;
+        opacity: 0.5;
+        overflow: hidden;
+        text-overflow: clip;
+        white-space: nowrap;
+      }
+      &-title {
+        width: fit-content;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
     }
     & img {
       max-height: 60vh;
@@ -158,6 +173,16 @@
 @media (hover: hover) {
   .post-photo {
     &-image {
+      &-caption {
+        &-tag {
+          @include transition(0.5s, 0s, ease-out, color, opacity);
+          cursor: pointer;
+          &:hover {
+            color: $light-color-hover;
+            opacity: 1;
+          }
+        }
+      }
       &-next {
         &:hover {
           & svg {
