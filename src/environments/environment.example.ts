@@ -27,6 +27,11 @@ export const environment = {
   `,
 
   /**
+   * Archive menu item visibility
+   */
+  archive: false,
+
+  /**
    * Copyright text
    * type: string
    */

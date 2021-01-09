@@ -25,7 +25,11 @@
         >About</a
       >
     </div>
-    <div #navigationItemElem class="menu-container-navigation-item">
+    <div
+      *ngIf="archive"
+      #navigationItemElem
+      class="menu-container-navigation-item"
+    >
       <a
         [routerLink]="['/archive']"
         target="_blank"

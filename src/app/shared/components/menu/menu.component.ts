@@ -24,6 +24,11 @@ export class MenuComponent implements OnInit {
   about = environment.about;
 
   /**
+   * Archive menu item visibility
+   */
+  archive = environment.archive;
+
+  /**
    * Copyright text
    */
   copyright = environment.copyright;
@@ -92,7 +97,9 @@ export class MenuComponent implements OnInit {
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
    */
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('archive', this.archive);
+  }
 
   /**
    * Handler to close menu.
