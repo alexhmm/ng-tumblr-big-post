@@ -211,7 +211,17 @@ export class MenuComponent implements OnInit {
     this.onMenuClose();
     // Remove input focus (closes mobile keyboard)
     this.searchElem.nativeElement.children[0].blur();
-    this.router.navigate(['tagged', this.searchForm.controls.search.value]);
+
+    // Check search value for # on first character. If so remove
+    let searchValue = this.searchForm.controls.search.value;
+    if (searchValue.charAt(0) === '#') {
+      searchValue = searchValue.substring(1, searchValue.length);
+    }
+
+    // Navigate to tagged posts
+    this.router.navigate(['tagged', searchValue]);
+
+    // Reset search form
     this.searchForm.controls.search.patchValue('');
   }
 }

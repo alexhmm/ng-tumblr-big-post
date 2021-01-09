@@ -1,10 +1,10 @@
-<section class="posts">
-  <div *ngIf="stateLoading" class="posts-loading" @fadeInOut>
+<main class="posts">
+  <section *ngIf="stateLoading" class="posts-loading" @fadeInOut>
     <div class="spinner">
       <div class="double-bounce1"></div>
       <div class="double-bounce2"></div>
     </div>
-  </div>
+  </section>
   <app-post-photo
     *ngFor="let post of posts; let i = index"
     #post
@@ -22,4 +22,7 @@
       'z-index': i === currentIndex ? 11 : 10
     }"
   ></app-post-photo>
-</section>
+  <section *ngIf="totalPosts === 0" class="posts-none" @fadeInOut>
+    No posts found {{ tag ? 'with tag #' + tag : null }}.
+  </section>
+</main>

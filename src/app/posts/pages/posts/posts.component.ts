@@ -160,6 +160,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
   initSubscriptionRouteParams(): void {
     this.route.params.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
       if (params.tag) {
+        this.tag = params.tag;
         // Sets tag on search
         this.postsService.setTag(params.tag);
       }
@@ -168,6 +169,8 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.postsService.getPosts(this.postsService.limit, 0, null, null);
       }
       if (params.page && !params.tag) {
+        this.tag = null;
+
         // Get posts by page
         this.postsService.getPosts(
           this.postsService.limit,
@@ -178,6 +181,8 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
         window.scroll(0, 0);
       }
       if (params.postId) {
+        this.tag = null;
+
         // Get single post
         this.postsService.getPosts(
           this.postsService.limit,
@@ -188,6 +193,8 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
         window.scroll(0, 0);
       }
       if (params.tag) {
+        this.tag = params.tag;
+
         // Get tagged posts
         this.postsService.getPosts(
           this.postsService.limit,
@@ -198,6 +205,8 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
         window.scroll(0, 0);
       }
       if (params.tag && params.page) {
+        this.tag = params.tag;
+
         // Get tagged posts by page
         this.postsService.getPosts(
           this.postsService.limit,
