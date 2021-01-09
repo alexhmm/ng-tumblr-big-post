@@ -97,9 +97,7 @@ export class MenuComponent implements OnInit {
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
    */
-  ngOnInit(): void {
-    console.log('archive', this.archive);
-  }
+  ngOnInit(): void {}
 
   /**
    * Handler to close menu.

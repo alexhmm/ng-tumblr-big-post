@@ -29,7 +29,7 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   currentIndex: number;
 
   /**
-   * Image source loaded validilty.
+   * Image source loaded validilty
    */
   @Input() loadSource: boolean;
 
@@ -54,9 +54,14 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() postVisible = false;
 
   /**
-   * Image source.
+   * Image source
    */
   src = '';
+
+  /**
+   * Loading state
+   */
+  stateLoading: boolean;
 
   /**
    * Total posts
@@ -144,10 +149,23 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
+   * Inits subscription on loading state.
+   */
+  initSubscriptionStateLoading(): void {
+    this.postsService.stateLoading
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(stateLoading => {
+        this.stateLoading = stateLoading;
+      });
+  }
+
+  /**
    * Handler on setting next post.
    */
   onNextPost(): void {
-    this.postsService.setNextIndex(this.currentIndex + 1);
+    if (!this.stateLoading) {
+      this.postsService.setNextIndex(this.currentIndex + 1);
+    }
   }
 
   /**
