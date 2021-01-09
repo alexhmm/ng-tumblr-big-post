@@ -29,6 +29,11 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   currentIndex: number;
 
   /**
+   * Image source loaded validilty.
+   */
+  @Input() loadSource: boolean;
+
+  /**
    * Post
    */
   @Input() post: Post;
@@ -54,9 +59,9 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   src = '';
 
   /**
-   * Image source loaded validilty.
+   * Total posts
    */
-  @Input() loadSource: boolean;
+  totalPosts: number;
 
   /**
    * Unsubscribe
@@ -77,6 +82,7 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.initSubscriptionCurrentIndex();
     this.initSubscriptionRouteParams();
+    this.initSubscriptionTotalPosts();
   }
 
   /**
@@ -124,6 +130,17 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
         this.postId = params.postId;
       }
     });
+  }
+
+  /**
+   * Inits subscription on total posts.
+   */
+  initSubscriptionTotalPosts(): void {
+    this.postsService.totalPosts
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(totalPosts => {
+        this.totalPosts = totalPosts;
+      });
   }
 
   /**
