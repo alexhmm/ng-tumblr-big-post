@@ -2,6 +2,7 @@
 @import 'theme.scss';
 
 .spinner {
+  @include transition(0.25s, 0s, ease-in-out, opacity);
   width: 24px;
   height: 24px;
   position: relative;

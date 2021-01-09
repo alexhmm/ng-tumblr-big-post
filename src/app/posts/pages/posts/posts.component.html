@@ -1,6 +1,6 @@
 <main class="posts">
-  <section *ngIf="stateLoading" class="posts-loading" @fadeInOut>
-    <div class="spinner">
+  <section class="posts-loading">
+    <div [ngStyle]="{ opacity: stateLoading ? 0.75 : 0 }" class="spinner">
       <div class="double-bounce1"></div>
       <div class="double-bounce2"></div>
     </div>
