@@ -5,7 +5,7 @@
   }"
 >
   <div class="post-photo-image">
-    <img [src]="src" (load)="onPostLoaded()" />
+    <img [src]="postSrc" (load)="onPostLoaded()" />
     <div class="post-photo-image-caption">
       <div class="post-photo-image-caption-title">{{ post?.summary }}</div>
       <ng-container *ngIf="stateTags">

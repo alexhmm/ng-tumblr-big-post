@@ -1,4 +1,5 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
+import { AppService, debounce } from './shared/services/app.service';
 
 import { PostsService } from './shared/services/posts.service';
 
@@ -21,8 +22,19 @@ export class AppComponent implements OnInit {
    */
   mousewheelUsed = false;
 
+  /**
+   * HostListener on window resize
+   * @param event Window resize event
+   */
+  @HostListener('window:resize', ['$event'])
+  @debounce(250)
+  onResize(event): void {
+    this.appService.setScreenState(window.innerWidth);
+  }
+
   constructor(
     private renderer2: Renderer2,
+    private appService: AppService,
     private postsService: PostsService
   ) {}
 

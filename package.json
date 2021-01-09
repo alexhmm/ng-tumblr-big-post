@@ -1,6 +1,6 @@
 {
-  "name": "ng-tumblr",
-  "version": "0.0.0",
+  "name": "ng-tumblr-big-post",
+  "version": "0.9.5",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

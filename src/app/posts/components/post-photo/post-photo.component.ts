@@ -11,6 +11,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { fadeInOut } from 'src/app/shared/services/animations';
+import { AppService } from 'src/app/shared/services/app.service';
 import { PostsService } from 'src/app/shared/services/posts.service';
 import { environment } from 'src/environments/environment';
 
@@ -52,19 +53,29 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() postIndex: number;
 
   /**
+   * Post image source
+   */
+  postSrc = '';
+
+  /**
+   * Post image source width
+   */
+  postSrcWidth = 0;
+
+  /**
    * Post visibility
    */
   @Input() postVisible = false;
 
   /**
-   * Image source
-   */
-  src = '';
-
-  /**
    * Loading state
    */
   stateLoading: boolean;
+
+  /**
+   * Screen state
+   */
+  stateScreen: string;
 
   /**
    * Display state for tags
@@ -87,6 +98,7 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private appService: AppService,
     private postsService: PostsService
   ) {}
 
@@ -96,6 +108,8 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.initSubscriptionCurrentIndex();
     this.initSubscriptionRouteParams();
+    this.initSubscriptionStateLoading();
+    this.initSubscriptionStateScreen();
     this.initSubscriptionTotalPosts();
   }
 
@@ -106,7 +120,7 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     // Load post source
     if (changes.loadSource && changes.loadSource.currentValue) {
-      this.src = this.post.photos[0].original_size.url;
+      this.setSource();
     }
     // Fade in post
     if (changes.postVisible && changes.postVisible.currentValue) {
@@ -114,7 +128,6 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.postVisible = false;
     }
-    console.log('post', this.post);
   }
 
   /**
@@ -148,17 +161,6 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
-   * Inits subscription on total posts.
-   */
-  initSubscriptionTotalPosts(): void {
-    this.postsService.totalPosts
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(totalPosts => {
-        this.totalPosts = totalPosts;
-      });
-  }
-
-  /**
    * Inits subscription on loading state.
    */
   initSubscriptionStateLoading(): void {
@@ -166,6 +168,40 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(stateLoading => {
         this.stateLoading = stateLoading;
+      });
+  }
+
+  /**
+   * Inits subscription on screen state.
+   */
+  initSubscriptionStateScreen(): void {
+    this.appService.stateScreen
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(stateScreen => {
+        // Change source url on resize
+        if (this.stateScreen !== stateScreen && this.postSrc) {
+          if (
+            this.postIndex > -1 &&
+            this.postIndex < this.totalPosts &&
+            (this.postIndex === this.currentIndex - 1 ||
+              this.postIndex === this.currentIndex ||
+              this.postIndex === this.currentIndex + 1)
+          ) {
+            this.setSource();
+          }
+          this.stateScreen = stateScreen;
+        }
+      });
+  }
+
+  /**
+   * Inits subscription on total posts.
+   */
+  initSubscriptionTotalPosts(): void {
+    this.postsService.totalPosts
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(totalPosts => {
+        this.totalPosts = totalPosts;
       });
   }
 
@@ -198,5 +234,38 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
    */
   onTag(tag: string): void {
     this.router.navigate(['tagged', tag]);
+  }
+
+  /**
+   * Sets photo post url.
+   */
+  setSource(): void {
+    // Set current window width
+    // Small devices load bigger images to get a good zoom experience
+    const windowWidth = window.innerWidth < 992 ? 992 : window.innerWidth;
+
+    // Get all image urls
+    const postSizes = this.post?.photos[0]?.alt_sizes;
+    let postSrc;
+    let postWidth;
+
+    for (let i = postSizes?.length - 1; i > -1; i--) {
+      if (postSizes[i].width >= windowWidth) {
+        // Only load a new source if new image is bigger than previous loaded source
+        if (postSizes[i].width > this.postSrcWidth) {
+          // Set source if image width is bigger than window width
+          postSrc = postSizes[i].url;
+          postWidth = postSizes[i].width;
+          break;
+        }
+      }
+      if (i === 0 && !postSrc) {
+        // If no match set biggest possible image width
+        postSrc = postSizes[i].url;
+        postWidth = postSizes[i].width;
+      }
+    }
+    this.postSrc = postSrc ? postSrc : null;
+    this.postSrcWidth = postWidth ? postWidth : null;
   }
 }
