@@ -25,18 +25,6 @@
     position: relative;
     max-height: 60vh;
     max-width: 100%;
-    &-prev {
-      @include highlight-disable();
-      cursor: pointer;
-      height: 100%;
-      left: 0;
-      position: absolute;
-      top: 0;
-      width: 50%;
-      & svg {
-        display: none;
-      }
-    }
     &-next {
       @include highlight-disable();
       cursor: pointer;
@@ -47,6 +35,32 @@
       width: 50%;
       & svg {
         display: none;
+        height: 24px;
+        opacity: 0;
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 48px;
+      }
+    }
+    &-prev {
+      @include highlight-disable();
+      cursor: pointer;
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 50%;
+      & svg {
+        display: none;
+        height: 24px;
+        left: 16px;
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 48px;
       }
     }
     &-caption {
@@ -110,6 +124,37 @@
   }
 }
 
+@media (pointer: coarse) {
+  .post-photo {
+    &-image {
+      &-next {
+        & svg {
+          display: block;
+          opacity: 1;
+          & line {
+            stroke: none;
+          }
+          & polyline {
+            stroke: $light-background-color;
+          }
+        }
+      }
+      &-prev {
+        & svg {
+          display: block;
+          opacity: 1;
+          & line {
+            stroke: none;
+          }
+          & polyline {
+            stroke: $light-background-color;
+          }
+        }
+      }
+    }
+  }
+}
+
 @media (hover: hover) {
   .post-photo {
     &-image {
@@ -122,13 +167,6 @@
         & svg {
           @include transition(0.25s, 0s, ease-in-out, opacity);
           display: block;
-          height: 24px;
-          opacity: 0;
-          position: absolute;
-          right: 16px;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 48px;
           & line,
           polyline {
             stroke: $light-background-color;
@@ -144,13 +182,6 @@
         & svg {
           @include transition(0.25s, 0s, ease-in-out, opacity);
           display: block;
-          height: 24px;
-          left: 16px;
-          opacity: 0;
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 48px;
           & line,
           polyline {
             stroke: $light-background-color;

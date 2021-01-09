@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { fadeInOut } from 'src/app/shared/services/animations';
 import { PostsService } from 'src/app/shared/services/posts.service';
 
 import { Post } from '../../models/post.interface';
@@ -20,7 +21,8 @@ import { Post } from '../../models/post.interface';
 @Component({
   selector: 'app-post-photo',
   templateUrl: './post-photo.component.html',
-  styleUrls: ['./post-photo.component.scss']
+  styleUrls: ['./post-photo.component.scss'],
+  animations: [fadeInOut]
 })
 export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   /**

@@ -13,6 +13,7 @@
       *ngIf="!postId && currentIndex > 0"
       class="post-photo-image-prev"
       (click)="onPreviousPost()"
+      @fadeInOut
     >
       <div class="icon-prev">
         <svg
@@ -48,6 +49,7 @@
       *ngIf="!postId && currentIndex < totalPosts - 1"
       class="post-photo-image-next"
       (click)="onNextPost()"
+      @fadeInOut
     >
       <svg
         version="1.1"
