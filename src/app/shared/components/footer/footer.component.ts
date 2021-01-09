@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -30,6 +31,11 @@ export class FooterComponent implements OnInit, OnDestroy {
   stateCounter: boolean;
 
   /**
+   * Posts tag
+   */
+  tag: string;
+
+  /**
    * Totol posts count
    */
   totalPosts: number;
@@ -39,7 +45,7 @@ export class FooterComponent implements OnInit, OnDestroy {
    */
   unsubscribe$ = new Subject();
 
-  constructor(private postsService: PostsService) {}
+  constructor(private router: Router, private postsService: PostsService) {}
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
@@ -47,6 +53,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initSubscriptionStateCounter();
     this.initSubscriptionCurrentIndex();
+    this.initSubscriptionTag();
     this.initSubscriptionTotalPosts();
   }
 
@@ -81,6 +88,15 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Inits subscription on posts tag.
+   */
+  initSubscriptionTag(): void {
+    this.postsService.tag.pipe(takeUntil(this.unsubscribe$)).subscribe(tag => {
+      this.tag = tag;
+    });
+  }
+
+  /**
    * Inits subscription on total posts count.
    */
   initSubscriptionTotalPosts(): void {
@@ -89,5 +105,13 @@ export class FooterComponent implements OnInit, OnDestroy {
       .subscribe(totalPosts => {
         this.totalPosts = totalPosts;
       });
+  }
+
+  /**
+   * Handler on removing tag.
+   */
+  onHome(): void {
+    this.router.navigate(['']);
+    this.postsService.setTag(null);
   }
 }

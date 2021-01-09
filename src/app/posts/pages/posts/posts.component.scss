@@ -1,5 +1,5 @@
+@import '../../../../styles/breakpoints.scss';
 @import '../../../../styles/elements.scss';
-@import '../../../../styles/mixins.scss';
 
 :host {
   display: flex;
@@ -25,12 +25,27 @@
   &-none {
     align-items: center;
     display: flex;
-    font-size: 2rem;
     height: 100%;
     justify-content: center;
     left: 0;
     position: fixed;
     top: 0;
     width: 100%;
+  }
+}
+
+@media (min-width: $md) {
+  .posts {
+    &-none {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+@media (min-width: $xl) {
+  .posts {
+    &-none {
+      font-size: 2rem;
+    }
   }
 }

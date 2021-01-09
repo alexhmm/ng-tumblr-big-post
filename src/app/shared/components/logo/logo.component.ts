@@ -40,6 +40,7 @@ export class LogoComponent implements OnInit {
    * Handler on clicking logo.
    */
   onHome(): void {
+    this.postsService.setTotalPosts(null);
     this.postsService.setTag(null);
     this.postsService.setPosts(null);
     this.postsService.getPosts(this.postsService.limit, 0, null, null);

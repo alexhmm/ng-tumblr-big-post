@@ -1,8 +1,22 @@
-<div
+<section
   *ngIf="stateCounter && totalPosts > 0"
-  class="counter"
+  class="footer-counter"
   [ngStyle]="{ opacity: totalPosts > 0 ? 1 : 0 }"
   @fadeInOut
 >
   {{ currentIndex + 1 }} / {{ totalPosts }}
-</div>
+</section>
+<section
+  *ngIf="tag && tag !== ''"
+  (click)="onHome()"
+  class="footer-tag"
+  @fadeInOut
+>
+  <div class="footer-tag-container">
+    <div class="footer-tag-container-text">#{{ tag }}</div>
+    <div class="footer-tag-container-button">
+      <div class="footer-tag-container-button-line-1"></div>
+      <div class="footer-tag-container-button-line-2"></div>
+    </div>
+  </div>
+</section>

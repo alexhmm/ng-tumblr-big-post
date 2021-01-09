@@ -23,6 +23,6 @@
     }"
   ></app-post-photo>
   <section *ngIf="totalPosts === 0" class="posts-none" @fadeInOut>
-    No posts found {{ tag ? 'with tag #' + tag : null }}.
+    No posts found{{ tag ? ' with tag #' + tag : null }}.
   </section>
 </main>
