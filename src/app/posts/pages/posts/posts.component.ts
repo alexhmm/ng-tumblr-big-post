@@ -3,10 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { AppService } from 'src/app/shared/services/app.service';
+import { fadeInOut } from 'src/app/shared/services/animations';
+import { PostsService } from 'src/app/shared/services/posts.service';
 
 import { Post } from 'src/app/posts/models/post.interface';
-import { PostsService } from 'src/app/posts/services/posts.service';
 
 /**
  * Displays tumblr posts
@@ -14,7 +14,8 @@ import { PostsService } from 'src/app/posts/services/posts.service';
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
-  styleUrls: ['./posts.component.scss']
+  styleUrls: ['./posts.component.scss'],
+  animations: [fadeInOut]
 })
 export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
@@ -70,12 +71,10 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * PostsComponent constructor
    * @param route ActivatedRoute
-   * @param appService AppService
    * @param postsService PostsService
    */
   constructor(
     private route: ActivatedRoute,
-    private appService: AppService,
     private postsService: PostsService
   ) {}
 
@@ -111,7 +110,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Inits subscription on current index
    */
   initSubscriptionCurrentIndex(): void {
-    this.appService.currentIndex
+    this.postsService.currentIndex
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(currentIndex => {
         this.oldIndex = this.currentIndex;
@@ -123,7 +122,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Subscription on posts loaded and current index.
    */
   initSubscriptionPostsLoadedCurrentIndex(): void {
-    combineLatest(this.postsService.postsLoaded, this.appService.currentIndex)
+    combineLatest(this.postsService.postsLoaded, this.postsService.currentIndex)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(postsLoadedCurrentIndex => {
         // Check if current index is loaded
@@ -161,6 +160,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
   initSubscriptionRouteParams(): void {
     this.route.params.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
       if (params.tag) {
+        this.tag = params.tag;
         // Sets tag on search
         this.postsService.setTag(params.tag);
       }
@@ -169,6 +169,8 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.postsService.getPosts(this.postsService.limit, 0, null, null);
       }
       if (params.page && !params.tag) {
+        this.tag = null;
+
         // Get posts by page
         this.postsService.getPosts(
           this.postsService.limit,
@@ -179,6 +181,8 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
         window.scroll(0, 0);
       }
       if (params.postId) {
+        this.tag = null;
+
         // Get single post
         this.postsService.getPosts(
           this.postsService.limit,
@@ -189,6 +193,8 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
         window.scroll(0, 0);
       }
       if (params.tag) {
+        this.tag = params.tag;
+
         // Get tagged posts
         this.postsService.getPosts(
           this.postsService.limit,
@@ -199,6 +205,8 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
         window.scroll(0, 0);
       }
       if (params.tag && params.page) {
+        this.tag = params.tag;
+
         // Get tagged posts by page
         this.postsService.getPosts(
           this.postsService.limit,
@@ -210,9 +218,9 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // Set counter visibility on single posts
       if (params.postId) {
-        this.appService.setStateCounter(false);
+        this.postsService.setStateCounter(false);
       } else {
-        this.appService.setStateCounter(true);
+        this.postsService.setStateCounter(true);
       }
     });
   }
@@ -230,7 +238,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Inits subscription on total posts count.
    */
   initSubscriptionTotalPosts(): void {
-    this.appService.totalPosts
+    this.postsService.totalPosts
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(totalPosts => {
         this.totalPosts = totalPosts;

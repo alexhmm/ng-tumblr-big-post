@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 
 import { fadeInOut } from '../../services/animations';
-
-import { AppService } from '../../services/app.service';
+import { PostsService } from '../../services/posts.service';
 
 @Component({
   selector: 'app-footer',
@@ -31,6 +31,11 @@ export class FooterComponent implements OnInit, OnDestroy {
   stateCounter: boolean;
 
   /**
+   * Posts tag
+   */
+  tag: string;
+
+  /**
    * Totol posts count
    */
   totalPosts: number;
@@ -40,7 +45,7 @@ export class FooterComponent implements OnInit, OnDestroy {
    */
   unsubscribe$ = new Subject();
 
-  constructor(private appService: AppService) {}
+  constructor(private router: Router, private postsService: PostsService) {}
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
@@ -48,6 +53,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initSubscriptionStateCounter();
     this.initSubscriptionCurrentIndex();
+    this.initSubscriptionTag();
     this.initSubscriptionTotalPosts();
   }
 
@@ -63,7 +69,7 @@ export class FooterComponent implements OnInit, OnDestroy {
    * Inits subscription on current index.
    */
   initSubscriptionCurrentIndex(): void {
-    this.appService.currentIndex
+    this.postsService.currentIndex
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(currentIndex => {
         this.currentIndex = currentIndex;
@@ -74,7 +80,7 @@ export class FooterComponent implements OnInit, OnDestroy {
    * Subscription on route params.
    */
   initSubscriptionStateCounter(): void {
-    this.appService.stateCounter
+    this.postsService.stateCounter
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(stateCounter => {
         this.stateCounter = stateCounter;
@@ -82,13 +88,30 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Inits subscription on posts tag.
+   */
+  initSubscriptionTag(): void {
+    this.postsService.tag.pipe(takeUntil(this.unsubscribe$)).subscribe(tag => {
+      this.tag = tag;
+    });
+  }
+
+  /**
    * Inits subscription on total posts count.
    */
   initSubscriptionTotalPosts(): void {
-    this.appService.totalPosts
+    this.postsService.totalPosts
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(totalPosts => {
         this.totalPosts = totalPosts;
       });
+  }
+
+  /**
+   * Handler on removing tag.
+   */
+  onHome(): void {
+    this.router.navigate(['']);
+    this.postsService.setTag(null);
   }
 }

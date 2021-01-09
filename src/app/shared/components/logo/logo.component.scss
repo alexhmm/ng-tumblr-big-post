@@ -3,9 +3,13 @@
 @import '../../../../styles/theme.scss';
 
 .logo {
+  @include highlight-disable();
+  align-items: center;
+  display: flex;
   font-family: 'Raleway', sans-serif;
   font-weight: 200;
   font-size: 1.75rem;
+  height: 32px;
   left: 16px;
   position: fixed;
   text-transform: uppercase;
@@ -16,6 +20,7 @@
 @media (min-width: $sm) {
   .logo {
     font-size: 2rem;
+    height: 36px;
     left: 32px;
     top: 32px;
   }
@@ -24,12 +29,14 @@
 @media (min-width: $md) {
   .logo {
     font-size: 2.25rem;
+    height: 40px;
   }
 }
 
 @media (min-width: $xl) {
   .logo {
     font-size: 2.5rem;
+    height: 44px;
     left: 48px;
     top: 64px;
   }
@@ -38,6 +45,7 @@
 @media (min-width: $fhd) {
   .logo {
     font-size: 3rem;
+    height: 52px;
   }
 }
 

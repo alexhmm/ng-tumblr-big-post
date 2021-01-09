@@ -1,62 +1,51 @@
 @import 'mixins.scss';
+@import 'theme.scss';
 
-.loader {
-  @include transition(0.5s, 0s, ease-in-out, opacity);
-  width: 30px;
-  height: 30px;
-  opacity: 0.5;
+.spinner {
+  @include transition(0.25s, 0s, ease-in-out, opacity);
+  width: 24px;
+  height: 24px;
   position: relative;
-  margin: auto;
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    border-radius: 50%;
-    background: black;
-    width: 8px;
-    height: 8px;
-    top: calc(50% - 8px);
-    left: calc(50% - 8px);
+}
+
+.double-bounce1,
+.double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: $light-color-hover;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  -webkit-animation: sk-bounce 2s infinite ease-in-out;
+  animation: sk-bounce 2s infinite ease-in-out;
+}
+
+.double-bounce2 {
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
+}
+
+@-webkit-keyframes sk-bounce {
+  0%,
+  100% {
+    -webkit-transform: scale(0);
   }
-  &::before {
-    opacity: 1;
-    animation: upperDot 2s ease-in-out infinite;
-  }
-  &::after {
-    opacity: 1;
-    animation: lowerDot 2s ease-in-out infinite;
-  }
-  &-list {
-    display: grid;
-    grid-template: repeat(3, 120px) / repeat(3, 120px);
-    grid-gap: 30px;
-  }
-  &-item {
-    display: flex;
-    background: rgba(0, 0, 0, 0.05);
+  50% {
+    -webkit-transform: scale(1);
   }
 }
 
-@keyframes upperDot {
-  0% {
-    transform: translateY(-50%);
+@keyframes sk-bounce {
+  0%,
+  100% {
+    transform: scale(0);
+    -webkit-transform: scale(0);
   }
   50% {
-    transform: translateY(50%);
-  }
-  100% {
-    transform: translateY(-50%);
-  }
-}
-
-@keyframes lowerDot {
-  0% {
-    transform: translateY(50%);
-  }
-  50% {
-    transform: translateY(-50%);
-  }
-  100% {
-    transform: translateY(50%);
+    transform: scale(1);
+    -webkit-transform: scale(1);
   }
 }

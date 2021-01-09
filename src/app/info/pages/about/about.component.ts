@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AppService } from 'src/app/shared/services/app.service';
+import { PostsService } from 'src/app/shared/services/posts.service';
 
 import { environment } from 'src/environments/environment';
 
@@ -14,12 +14,12 @@ export class AboutComponent implements OnInit {
    */
   about = environment.about;
 
-  constructor(private appService: AppService) {}
+  constructor(private postsService: PostsService) {}
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
    */
   ngOnInit(): void {
-    this.appService.setStateCounter(false);
+    this.postsService.setStateCounter(false);
   }
 }

@@ -10,10 +10,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { AppService } from 'src/app/shared/services/app.service';
+import { fadeInOut } from 'src/app/shared/services/animations';
+import { PostsService } from 'src/app/shared/services/posts.service';
 
 import { Post } from '../../models/post.interface';
-import { PostsService } from '../../services/posts.service';
 
 /**
  * PostPhotoComponent
@@ -21,13 +21,19 @@ import { PostsService } from '../../services/posts.service';
 @Component({
   selector: 'app-post-photo',
   templateUrl: './post-photo.component.html',
-  styleUrls: ['./post-photo.component.scss']
+  styleUrls: ['./post-photo.component.scss'],
+  animations: [fadeInOut]
 })
 export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Current post index
    */
   currentIndex: number;
+
+  /**
+   * Image source loaded validilty
+   */
+  @Input() loadSource: boolean;
 
   /**
    * Post
@@ -50,14 +56,19 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() postVisible = false;
 
   /**
-   * Image source.
+   * Image source
    */
   src = '';
 
   /**
-   * Image source loaded validilty.
+   * Loading state
    */
-  @Input() loadSource: boolean;
+  stateLoading: boolean;
+
+  /**
+   * Total posts
+   */
+  totalPosts: number;
 
   /**
    * Unsubscribe
@@ -68,7 +79,6 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
    * PostPhotoComponent constructor.
    */
   constructor(
-    private appService: AppService,
     private postsService: PostsService,
     private route: ActivatedRoute
   ) {}
@@ -79,6 +89,7 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.initSubscriptionCurrentIndex();
     this.initSubscriptionRouteParams();
+    this.initSubscriptionTotalPosts();
   }
 
   /**
@@ -110,7 +121,7 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
    * Inits subscription on current index.
    */
   initSubscriptionCurrentIndex(): void {
-    this.appService.currentIndex
+    this.postsService.currentIndex
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(currentIndex => {
         this.currentIndex = currentIndex;
@@ -129,10 +140,34 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
+   * Inits subscription on total posts.
+   */
+  initSubscriptionTotalPosts(): void {
+    this.postsService.totalPosts
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(totalPosts => {
+        this.totalPosts = totalPosts;
+      });
+  }
+
+  /**
+   * Inits subscription on loading state.
+   */
+  initSubscriptionStateLoading(): void {
+    this.postsService.stateLoading
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(stateLoading => {
+        this.stateLoading = stateLoading;
+      });
+  }
+
+  /**
    * Handler on setting next post.
    */
   onNextPost(): void {
-    this.postsService.setNextIndex(this.currentIndex + 1);
+    if (!this.stateLoading) {
+      this.postsService.setNextIndex(this.currentIndex + 1);
+    }
   }
 
   /**

@@ -10,9 +10,10 @@
       {{ post?.summary }}
     </div>
     <div
-      *ngIf="!postId"
+      *ngIf="!postId && currentIndex > 0"
       class="post-photo-image-prev"
       (click)="onPreviousPost()"
+      @fadeInOut
     >
       <div class="icon-prev">
         <svg
@@ -44,7 +45,12 @@
         </svg>
       </div>
     </div>
-    <div *ngIf="!postId" class="post-photo-image-next" (click)="onNextPost()">
+    <div
+      *ngIf="!postId && currentIndex < totalPosts - 1"
+      class="post-photo-image-next"
+      (click)="onNextPost()"
+      @fadeInOut
+    >
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"

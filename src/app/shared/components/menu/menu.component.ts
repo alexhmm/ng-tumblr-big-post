@@ -11,7 +11,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { environment } from 'src/environments/environment';
-import { AppService } from '../../services/app.service';
 
 @Component({
   selector: 'app-menu',
@@ -23,6 +22,11 @@ export class MenuComponent implements OnInit {
    * About
    */
   about = environment.about;
+
+  /**
+   * Archive menu item visibility
+   */
+  archive = environment.archive;
 
   /**
    * Copyright text
@@ -88,11 +92,7 @@ export class MenuComponent implements OnInit {
    */
   stateMenu = false;
 
-  constructor(
-    private renderer2: Renderer2,
-    private router: Router,
-    private appService: AppService
-  ) {}
+  constructor(private renderer2: Renderer2, private router: Router) {}
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
@@ -114,34 +114,31 @@ export class MenuComponent implements OnInit {
 
     // Animate menu icon
     this.renderer2.setStyle(
-      this.menuIconElem.nativeElement.children[0],
+      this.menuIconElem.nativeElement.children[0].children[0],
       'transform',
       'rotate(0deg) translateY(-150%)'
     );
     this.renderer2.setStyle(
-      this.menuIconElem.nativeElement.children[1],
+      this.menuIconElem.nativeElement.children[0].children[1],
       'transform',
       'rotate(0deg) translateY(150%)'
     );
 
-    // Wait for menu container to fade out
-    setTimeout(() => {
-      // Animate navigation items
-      const navigationItems = this.navigationItemElems.toArray();
-      for (const navigationItem of navigationItems) {
-        this.renderer2.setStyle(
-          navigationItem.nativeElement,
-          'transform',
-          'translateX(100%)'
-        );
-        this.renderer2.setStyle(navigationItem.nativeElement, 'opacity', 0);
-      }
+    // Animate navigation items
+    const navigationItems = this.navigationItemElems.toArray();
+    for (const navigationItem of navigationItems) {
+      this.renderer2.setStyle(
+        navigationItem.nativeElement,
+        'transform',
+        'translateX(100%)'
+      );
+      this.renderer2.setStyle(navigationItem.nativeElement, 'opacity', 0);
+    }
 
-      // Unset opacity of search input and info elements
-      this.renderer2.setStyle(this.copyrightElem.nativeElement, 'opacity', 0);
-      this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 0);
-      this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 0);
-    }, 500);
+    // Unset opacity of search input and info elements
+    this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 0);
+    this.renderer2.setStyle(this.copyrightElem.nativeElement, 'opacity', 0);
+    this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 0);
   }
 
   /**
@@ -159,12 +156,12 @@ export class MenuComponent implements OnInit {
 
     // Animate menu icon
     this.renderer2.setStyle(
-      this.menuIconElem.nativeElement.children[0],
+      this.menuIconElem.nativeElement.children[0].children[0],
       'transform',
       'rotate(45deg) translateY(0%)'
     );
     this.renderer2.setStyle(
-      this.menuIconElem.nativeElement.children[1],
+      this.menuIconElem.nativeElement.children[0].children[1],
       'transform',
       'rotate(-45deg) translateY(0%)'
     );
@@ -212,7 +209,19 @@ export class MenuComponent implements OnInit {
    */
   onSearch(): void {
     this.onMenuClose();
-    this.router.navigate(['tagged', this.searchForm.controls.search.value]);
+    // Remove input focus (closes mobile keyboard)
+    this.searchElem.nativeElement.children[0].blur();
+
+    // Check search value for # on first character. If so remove
+    let searchValue = this.searchForm.controls.search.value;
+    if (searchValue.charAt(0) === '#') {
+      searchValue = searchValue.substring(1, searchValue.length);
+    }
+
+    // Navigate to tagged posts
+    this.router.navigate(['tagged', searchValue]);
+
+    // Reset search form
     this.searchForm.controls.search.patchValue('');
   }
 }

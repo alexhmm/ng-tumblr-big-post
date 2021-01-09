@@ -11,9 +11,6 @@ import { PostsComponent } from './pages/posts/posts.component';
 // Module components
 import { PostPhotoComponent } from './components/post-photo/post-photo.component';
 
-// Module services
-import { PostsService } from './services/posts.service';
-
 /**
  * Module routes
  */
@@ -51,7 +48,6 @@ const routes: Routes = [
     HttpClientModule,
     RouterModule.forChild(routes),
     SharedModule
-  ],
-  providers: [PostsService]
+  ]
 })
 export class PostsModule {}
