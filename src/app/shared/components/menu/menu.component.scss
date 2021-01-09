@@ -36,6 +36,7 @@
       top: 96px;
       width: max-content;
       &-item {
+        @include highlight-disable();
         @include transition(0.5s, 0s, ease-out, opacity, transform);
         color: $light-color;
         opacity: 0;
@@ -70,6 +71,7 @@
       position: fixed;
       width: 100%;
       &-item {
+        @include highlight-disable();
         padding: 8px;
       }
     }

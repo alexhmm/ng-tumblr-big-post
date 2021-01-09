@@ -3,6 +3,7 @@
 @import '../../../../styles/theme.scss';
 
 .logo {
+  @include highlight-disable();
   font-family: 'Raleway', sans-serif;
   font-weight: 200;
   font-size: 1.75rem;
