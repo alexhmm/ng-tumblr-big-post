@@ -209,6 +209,8 @@ export class MenuComponent implements OnInit {
    */
   onSearch(): void {
     this.onMenuClose();
+    // Remove input focus (closes mobile keyboard)
+    this.searchElem.nativeElement.children[0].blur();
     this.router.navigate(['tagged', this.searchForm.controls.search.value]);
     this.searchForm.controls.search.patchValue('');
   }
