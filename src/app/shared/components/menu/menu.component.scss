@@ -77,31 +77,38 @@
     }
   }
   &-icon {
-    @include transition(1s, 0s, ease-in-out, opacity);
     align-items: center;
     display: flex;
-    height: 1.75rem;
-    right: 12px;
-    opacity: 1;
+    height: 32px;
+    justify-content: center;
     position: fixed;
-    top: 12px;
+    right: 16px;
+    top: 16px;
+    width: 28px;
     z-index: 52;
-    width: 1.75rem;
-    &-line-1 {
-      @include transition(0.5s, 0s, ease-out, background-color, transform);
-      background-color: $light-color;
-      position: absolute;
-      height: 0.1em;
-      transform: translateY(-150%);
-      width: 100%;
-    }
-    &-line-2 {
-      @include transition(0.5s, 0s, ease-out, background-color, transform);
-      background-color: $light-color;
-      position: absolute;
-      height: 0.1em;
-      transform: translateY(150%);
-      width: 100%;
+    &-button {
+      @include transition(1s, 0s, ease-in-out, opacity);
+      align-items: center;
+      display: flex;
+      height: 28px;
+      opacity: 1;
+      width: 28px;
+      &-line-1 {
+        @include transition(0.5s, 0s, ease-out, background-color, transform);
+        background-color: $light-color;
+        position: absolute;
+        height: 2px;
+        transform: translateY(-150%);
+        width: 100%;
+      }
+      &-line-2 {
+        @include transition(0.5s, 0s, ease-out, background-color, transform);
+        background-color: $light-color;
+        position: absolute;
+        height: 2px;
+        transform: translateY(150%);
+        width: 100%;
+      }
     }
   }
 }
@@ -124,8 +131,9 @@
       }
     }
     &-icon {
-      right: 28px;
-      top: 28px;
+      height: 40px;
+      right: 32px;
+      top: 32px;
     }
   }
 }
@@ -149,12 +157,8 @@
       }
     }
     &-icon {
-      &-line-1 {
-        height: 0.15em;
-      }
-      &-line-2 {
-        height: 0.15em;
-      }
+      height: 40px;
+      width: 32px;
     }
   }
 }
@@ -172,8 +176,9 @@
 @media (min-width: $xl) {
   .menu {
     &-icon {
-      right: 44px;
-      top: 60px;
+      height: 44px;
+      right: 48px;
+      top: 64px;
     }
     &-container {
       &-copyright {
@@ -197,8 +202,11 @@
 @media (min-width: $fhd) {
   .menu {
     &-icon {
-      height: 2.25rem;
-      width: 2.25rem;
+      height: 52px;
+      &-button {
+        height: 2.25rem;
+        width: 2.25rem;
+      }
     }
   }
 }
@@ -208,8 +216,8 @@
     &-icon {
       cursor: pointer;
       &:hover {
-        & .menu-icon-line-1,
-        .menu-icon-line-2 {
+        & .menu-icon-button-line-1,
+        .menu-icon-button-line-2 {
           background-color: $light-color-hover;
         }
       }

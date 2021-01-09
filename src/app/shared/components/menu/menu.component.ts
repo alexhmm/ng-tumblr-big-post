@@ -114,12 +114,12 @@ export class MenuComponent implements OnInit {
 
     // Animate menu icon
     this.renderer2.setStyle(
-      this.menuIconElem.nativeElement.children[0],
+      this.menuIconElem.nativeElement.children[0].children[0],
       'transform',
       'rotate(0deg) translateY(-150%)'
     );
     this.renderer2.setStyle(
-      this.menuIconElem.nativeElement.children[1],
+      this.menuIconElem.nativeElement.children[0].children[1],
       'transform',
       'rotate(0deg) translateY(150%)'
     );
@@ -156,12 +156,12 @@ export class MenuComponent implements OnInit {
 
     // Animate menu icon
     this.renderer2.setStyle(
-      this.menuIconElem.nativeElement.children[0],
+      this.menuIconElem.nativeElement.children[0].children[0],
       'transform',
       'rotate(45deg) translateY(0%)'
     );
     this.renderer2.setStyle(
-      this.menuIconElem.nativeElement.children[1],
+      this.menuIconElem.nativeElement.children[0].children[1],
       'transform',
       'rotate(-45deg) translateY(0%)'
     );
