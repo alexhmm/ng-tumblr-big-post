@@ -95,6 +95,11 @@ export class MenuComponent implements OnInit {
   stateMenu = false;
 
   /**
+   * Toggle menu state
+   */
+  stateMenuToggle = false;
+
+  /**
    * Theme element
    */
   @ViewChild('themeElem') themeElem: ElementRef;
@@ -123,6 +128,7 @@ export class MenuComponent implements OnInit {
    * Handler to close menu.
    */
   onMenuClose(): void {
+    this.stateMenuToggle = true;
     this.stateMenu = false;
 
     // Animate container
@@ -160,12 +166,18 @@ export class MenuComponent implements OnInit {
     this.renderer2.setStyle(this.copyrightElem.nativeElement, 'opacity', 0);
     this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 0);
     this.renderer2.setStyle(this.themeElem.nativeElement, 'opacity', 0);
+
+    // Set menu toggle state to false if menu is closed
+    setTimeout(() => {
+      this.stateMenuToggle = false;
+    }, 500);
   }
 
   /**
    * Handler to open menu.
    */
   onMenuOpen(): void {
+    this.stateMenuToggle = true;
     this.stateMenu = true;
 
     // Animate container
@@ -212,6 +224,8 @@ export class MenuComponent implements OnInit {
       this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 1);
       this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 1);
       this.renderer2.setStyle(this.themeElem.nativeElement, 'opacity', 1);
+      // Set menu toggle state to false if menu is opened
+      this.stateMenuToggle = false;
     }, 1000);
   }
 
@@ -219,10 +233,13 @@ export class MenuComponent implements OnInit {
    * Handler to toggle menu.
    */
   onMenuToggle(): void {
-    if (!this.stateMenu) {
-      this.onMenuOpen();
-    } else {
-      this.onMenuClose();
+    // Only toggle menu if not in toggle state
+    if (!this.stateMenuToggle) {
+      if (!this.stateMenu) {
+        this.onMenuOpen();
+      } else {
+        this.onMenuClose();
+      }
     }
   }
 
