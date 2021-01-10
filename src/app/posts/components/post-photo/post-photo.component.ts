@@ -225,7 +225,21 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
    * Handler on setting previous post.
    */
   onPreviousPost(): void {
-    this.postsService.setPreviousIndex(this.currentIndex - 1);
+    if (this.currentIndex > 0) {
+      this.postsService.setPreviousIndex(this.currentIndex - 1);
+    }
+  }
+
+  /**
+   * Handler on swipe posts.
+   * @param $event Swipe event
+   */
+  onSwipe($event): void {
+    if ($event.deltaX > 40) {
+      this.onPreviousPost();
+    } else if ($event.deltaX < -40) {
+      this.onNextPost();
+    }
   }
 
   /**

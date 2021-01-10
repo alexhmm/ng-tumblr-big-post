@@ -140,37 +140,6 @@
   }
 }
 
-@media (pointer: coarse) {
-  .post-photo {
-    &-image {
-      &-next {
-        & svg {
-          display: block;
-          opacity: 1;
-          & line {
-            stroke: none;
-          }
-          & polyline {
-            stroke: var(--posts-nav-item-color);
-          }
-        }
-      }
-      &-prev {
-        & svg {
-          display: block;
-          opacity: 1;
-          & line {
-            stroke: none;
-          }
-          & polyline {
-            stroke: var(--posts-nav-item-color);
-          }
-        }
-      }
-    }
-  }
-}
-
 @media (hover: hover) {
   .post-photo {
     &-image {
