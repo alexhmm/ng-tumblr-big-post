@@ -34,6 +34,11 @@ export class AppService {
    */
   screen: string;
 
+  /**
+   * Application theme
+   */
+  theme = 'light';
+
   // Observables
   stateScreenSrc = new BehaviorSubject(null);
   stateScreen = this.stateScreenSrc.asObservable();
@@ -72,5 +77,29 @@ export class AppService {
       this.screen = 'fhd';
       this.stateScreenSrc.next('fhd');
     }
+  }
+
+  /**
+   * Sets app theme.
+   * @param theme App theme
+   */
+  setTheme(theme: string): void {
+    if (theme === 'light') {
+      document
+        .querySelector('meta[name="theme-color"]')
+        .setAttribute('content', '#fafafa');
+      document
+        .querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')
+        .setAttribute('content', '#fafafa');
+    } else if (theme === 'dark') {
+      document
+        .querySelector('meta[name="theme-color"]')
+        .setAttribute('content', '#1f1f1f');
+      document
+        .querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')
+        .setAttribute('content', '#1f1f1f');
+    }
+    this.theme = theme;
+    document.documentElement.setAttribute('theme', this.theme);
   }
 }

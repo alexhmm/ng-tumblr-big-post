@@ -3,7 +3,9 @@
 @import '../../../../styles/theme.scss';
 
 :host {
+  @include transition(0.5s, 0s, ease-out, background-color, color);
   align-items: center;
+  background-color: var(--theme-background-color);
   display: flex;
   height: 100%;
   justify-content: center;
@@ -14,8 +16,10 @@
 }
 
 .about {
+  @include transition(0.5s, 0s, ease-out, background-color, color);
   align-items: center;
-  background-color: $light-background-color;
+  background-color: var(--theme-background-color);
+  color: var(--theme-color);
   display: flex;
   justify-content: center;
   max-height: 60vh;

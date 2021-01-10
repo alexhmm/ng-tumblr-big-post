@@ -11,7 +11,7 @@
   transform: translateY(-50%);
   z-index: 200;
   &-item {
-    color: $light-nav-color;
+    color: var(--theme-color);
     font-size: 0.85rem;
     letter-spacing: 0.1em;
     &:not(:last-child) {
@@ -31,7 +31,7 @@
     &-item {
       @include transition(0.25s, 0s, ease-in-out, color);
       &:hover {
-        color: $light-color-hover;
+        color: var(--theme-color-hover);
       }
     }
   }

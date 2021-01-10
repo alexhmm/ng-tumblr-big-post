@@ -73,7 +73,7 @@
       top: -32px;
       width: calc(100% - 32px);
       &-tag {
-        color: $light-color;
+        color: var(--theme-color);
         margin-left: 8px;
         opacity: 0.5;
         overflow: hidden;
@@ -89,6 +89,7 @@
       }
     }
     & img {
+      filter: var(--posts-filter);
       max-height: 60vh;
       max-width: 100%;
     }
@@ -150,7 +151,7 @@
             stroke: none;
           }
           & polyline {
-            stroke: $light-background-color;
+            stroke: var(--posts-nav-item-color);
           }
         }
       }
@@ -162,7 +163,7 @@
             stroke: none;
           }
           & polyline {
-            stroke: $light-background-color;
+            stroke: var(--posts-nav-item-color);
           }
         }
       }
@@ -178,7 +179,7 @@
           @include transition(0.5s, 0s, ease-out, color, opacity);
           cursor: pointer;
           &:hover {
-            color: $light-color-hover;
+            color: var(--theme-color-hover);
             opacity: 1;
           }
         }
@@ -194,7 +195,7 @@
           display: block;
           & line,
           polyline {
-            stroke: $light-background-color;
+            stroke: var(--posts-nav-item-color);
           }
         }
       }
@@ -209,7 +210,7 @@
           display: block;
           & line,
           polyline {
-            stroke: $light-background-color;
+            stroke: var(--posts-nav-item-color);
           }
         }
       }

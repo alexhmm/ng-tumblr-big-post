@@ -5,7 +5,7 @@
 .menu {
   &-container {
     @include transition(0.5s, 0s, ease-out, transform);
-    background-color: $light-menu-background-color;
+    background-color: var(--menu-background-color);
     display: flex;
     height: 100%;
     left: 0;
@@ -15,9 +15,9 @@
     width: 100%;
     z-index: 50;
     &-copyright {
-      @include transition(0.5s, 0s, ease-out, opacity, transform);
+      @include transition(0.5s, 0s, ease-out, opacity);
       bottom: 32px;
-      color: $light-color;
+      color: var(--theme-color);
       display: flex;
       font-size: 0.8rem;
       justify-content: center;
@@ -38,13 +38,13 @@
       &-item {
         @include highlight-disable();
         @include transition(0.5s, 0s, ease-out, opacity, transform);
-        color: $light-color;
+        color: var(--theme-color);
         opacity: 0;
         transform: translateX(100%);
       }
     }
     &-search {
-      @include transition(0.5s, 0s, ease-out, opacity, transform);
+      @include transition(0.5s, 0s, ease-out, opacity);
       top: 12px;
       box-sizing: border-box;
       display: flex;
@@ -54,16 +54,16 @@
       position: fixed;
       width: calc(100% - 72px);
       & input {
-        border-bottom: 1px solid $light-color;
-        color: $light-color;
+        border-bottom: 1px solid var(--theme-color);
+        color: var(--theme-color);
         padding: 4px 0px;
         width: 100%;
       }
     }
     &-social {
-      @include transition(0.5s, 0s, ease-out, opacity, transform);
+      @include transition(0.5s, 0s, ease-out, opacity);
       bottom: 96px;
-      color: $light-color;
+      color: var(--theme-color);
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -73,6 +73,24 @@
       &-item {
         @include highlight-disable();
         padding: 8px;
+      }
+    }
+    &-theme {
+      @include highlight-disable();
+      @include transition(0.5s, 0s, ease-out, opacity);
+      align-items: center;
+      bottom: 16px;
+      display: flex;
+      justify-content: center;
+      left: 16px;
+      opacity: 0;
+      position: fixed;
+      &-container {
+        background-color: var(--theme-color);
+        border-radius: 16px;
+        height: 32px;
+        transform: scale(0.5);
+        width: 32px;
       }
     }
   }
@@ -95,7 +113,7 @@
       width: 28px;
       &-line-1 {
         @include transition(0.5s, 0s, ease-out, background-color, transform);
-        background-color: $light-color;
+        background-color: var(--theme-color);
         position: absolute;
         height: 2px;
         transform: translateY(-150%);
@@ -103,7 +121,7 @@
       }
       &-line-2 {
         @include transition(0.5s, 0s, ease-out, background-color, transform);
-        background-color: $light-color;
+        background-color: var(--theme-color);
         position: absolute;
         height: 2px;
         transform: translateY(150%);
@@ -129,6 +147,10 @@
         bottom: 128px;
         width: 420px;
       }
+      &-theme {
+        bottom: 32px;
+        left: 32px;
+      }
     }
     &-icon {
       height: 40px;
@@ -148,7 +170,7 @@
       }
       &-search {
         & input {
-          border-bottom: 2px solid $light-color;
+          border-bottom: 2px solid var(--theme-color);
           font-size: 1.5rem;
         }
       }
@@ -195,6 +217,10 @@
       &-social {
         bottom: 156px;
       }
+      &-theme {
+        bottom: 48px;
+        left: 48px;
+      }
     }
   }
 }
@@ -211,6 +237,16 @@
   }
 }
 
+@media (pointer: coarse) {
+  .menu {
+    &-container {
+      &-theme {
+        transform: scale(0.625);
+      }
+    }
+  }
+}
+
 @media (hover: hover) {
   .menu {
     &-icon {
@@ -218,7 +254,7 @@
       &:hover {
         & .menu-icon-button-line-1,
         .menu-icon-button-line-2 {
-          background-color: $light-color-hover;
+          background-color: var(--theme-color-hover);
         }
       }
     }
@@ -230,7 +266,7 @@
           }
           &:hover {
             a {
-              color: $light-color-hover;
+              color: var(--theme-color-hover);
             }
           }
         }
@@ -239,7 +275,17 @@
         a {
           @include transition(0.25s, 0s, ease-out, color);
           &:hover {
-            color: $light-color-hover;
+            color: var(--theme-color-hover);
+          }
+        }
+      }
+      &-theme {
+        &-container {
+          @include transition(0.25s, 0s, ease-out, background-color, transform);
+          cursor: pointer;
+          &:hover {
+            background-color: var(--theme-color-hover);
+            transform: scale(0.625);
           }
         }
       }
