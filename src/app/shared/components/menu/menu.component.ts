@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 
 import { environment } from 'src/environments/environment';
 import { AppService } from '../../services/app.service';
+import { PostsService } from '../../services/posts.service';
 
 @Component({
   selector: 'app-menu',
@@ -101,13 +102,22 @@ export class MenuComponent implements OnInit {
   constructor(
     private renderer2: Renderer2,
     private router: Router,
-    private appService: AppService
+    private appService: AppService,
+    private postsService: PostsService
   ) {}
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
    */
   ngOnInit(): void {}
+
+  /**
+   * Handler on clicking about menu item.
+   */
+  onClickAbout(): void {
+    this.postsService.setTag(null);
+    this.onMenuToggle();
+  }
 
   /**
    * Handler to close menu.
