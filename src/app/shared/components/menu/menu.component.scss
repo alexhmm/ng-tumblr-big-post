@@ -244,7 +244,9 @@
   .menu {
     &-container {
       &-theme {
-        transform: scale(0.625);
+        &-container {
+          transform: scale(0.625);
+        }
       }
     }
   }
