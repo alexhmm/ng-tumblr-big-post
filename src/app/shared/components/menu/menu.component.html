@@ -10,7 +10,7 @@
     <div #navigationItemElem class="menu-container-navigation-item">
       <a
         [routerLink]="['']"
-        (click)="onMenuToggle()"
+        (click)="onClickHome()"
         class="menu-container-navigation-item-href"
         >Home</a
       >
@@ -22,13 +22,13 @@
     >
       <a
         [routerLink]="['info', 'about']"
-        (click)="onMenuToggle()"
+        (click)="onClickAbout()"
         class="menu-container-navigation-item-href"
         >About</a
       >
     </div>
     <div
-      *ngIf="archive"
+      *ngIf="stateArchive"
       #navigationItemElem
       class="menu-container-navigation-item"
     >
@@ -104,5 +104,9 @@
 
   <section #copyrightElem class="menu-container-copyright">
     {{ copyright }}
+  </section>
+
+  <section #themeElem (click)="onToggleTheme()" class="menu-container-theme">
+    <div class="menu-container-theme-container"></div>
   </section>
 </main>

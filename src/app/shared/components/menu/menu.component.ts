@@ -11,6 +11,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { environment } from 'src/environments/environment';
+import { AppService } from '../../services/app.service';
+import { PostsService } from '../../services/posts.service';
 
 @Component({
   selector: 'app-menu',
@@ -24,49 +26,44 @@ export class MenuComponent implements OnInit {
   about = environment.about;
 
   /**
-   * Archive menu item visibility
-   */
-  archive = environment.archive;
-
-  /**
    * Copyright text
    */
   copyright = environment.copyright;
 
   /**
-   * Copyright
+   * Copyright element
    */
   @ViewChild('copyrightElem') copyrightElem: ElementRef;
 
   /**
-   * Menu bars icon
+   * Menu bars icon element
    */
   @ViewChild('menuBarsElem') menuBarsElem: ElementRef;
 
   /**
-   * Menu close icon
+   * Menu close icon element
    */
   @ViewChild('menuCloseElem') menuCloseElem: ElementRef;
 
   /**
-   * Menu container
+   * Menu container element
    */
   @ViewChild('menuContainerElem') menuContainerElem: ElementRef;
 
   /**
-   * Menu item
+   * Menu item element
    */
   @ViewChild('menuIconElem') menuIconElem: ElementRef;
 
   /**
-   * Navigation items
+   * Navigation item elements
    */
   @ViewChildren('navigationItemElem') navigationItemElems!: QueryList<
     ElementRef
   >;
 
   /**
-   * Search
+   * Search element
    */
   @ViewChild('searchElem') searchElem: ElementRef;
 
@@ -88,11 +85,31 @@ export class MenuComponent implements OnInit {
   social = environment.social;
 
   /**
+   * Display state for archive menu item
+   */
+  stateArchive = environment.state.menu.archive;
+
+  /**
    * Menu state
    */
   stateMenu = false;
 
-  constructor(private renderer2: Renderer2, private router: Router) {}
+  /**
+   * Toggle menu state
+   */
+  stateMenuToggle = false;
+
+  /**
+   * Theme element
+   */
+  @ViewChild('themeElem') themeElem: ElementRef;
+
+  constructor(
+    private renderer2: Renderer2,
+    private router: Router,
+    private appService: AppService,
+    private postsService: PostsService
+  ) {}
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
@@ -100,9 +117,27 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {}
 
   /**
+   * Handler on clicking about menu item.
+   */
+  onClickAbout(): void {
+    this.postsService.setTag(null);
+    this.onMenuToggle();
+  }
+
+  /**
+   * Handler on clicking home menu item.
+   */
+  onClickHome(): void {
+    this.postsService.setCurrentIndex(0);
+    this.postsService.setTag(null);
+    this.onMenuToggle();
+  }
+
+  /**
    * Handler to close menu.
    */
   onMenuClose(): void {
+    this.stateMenuToggle = true;
     this.stateMenu = false;
 
     // Animate container
@@ -139,12 +174,19 @@ export class MenuComponent implements OnInit {
     this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 0);
     this.renderer2.setStyle(this.copyrightElem.nativeElement, 'opacity', 0);
     this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 0);
+    this.renderer2.setStyle(this.themeElem.nativeElement, 'opacity', 0);
+
+    // Set menu toggle state to false if menu is closed
+    setTimeout(() => {
+      this.stateMenuToggle = false;
+    }, 500);
   }
 
   /**
    * Handler to open menu.
    */
   onMenuOpen(): void {
+    this.stateMenuToggle = true;
     this.stateMenu = true;
 
     // Animate container
@@ -190,6 +232,9 @@ export class MenuComponent implements OnInit {
       this.renderer2.setStyle(this.copyrightElem.nativeElement, 'opacity', 0.5);
       this.renderer2.setStyle(this.searchElem.nativeElement, 'opacity', 1);
       this.renderer2.setStyle(this.socialElem.nativeElement, 'opacity', 1);
+      this.renderer2.setStyle(this.themeElem.nativeElement, 'opacity', 1);
+      // Set menu toggle state to false if menu is opened
+      this.stateMenuToggle = false;
     }, 1000);
   }
 
@@ -197,10 +242,13 @@ export class MenuComponent implements OnInit {
    * Handler to toggle menu.
    */
   onMenuToggle(): void {
-    if (!this.stateMenu) {
-      this.onMenuOpen();
-    } else {
-      this.onMenuClose();
+    // Only toggle menu if not in toggle state
+    if (!this.stateMenuToggle) {
+      if (!this.stateMenu) {
+        this.onMenuOpen();
+      } else {
+        this.onMenuClose();
+      }
     }
   }
 
@@ -213,7 +261,7 @@ export class MenuComponent implements OnInit {
     this.searchElem.nativeElement.children[0].blur();
 
     // Check search value for # on first character. If so remove
-    let searchValue = this.searchForm.controls.search.value;
+    let searchValue = this.searchForm.controls.search.value.toLowerCase();
     if (searchValue.charAt(0) === '#') {
       searchValue = searchValue.substring(1, searchValue.length);
     }
@@ -223,5 +271,14 @@ export class MenuComponent implements OnInit {
 
     // Reset search form
     this.searchForm.controls.search.patchValue('');
+  }
+
+  /**
+   * Handler on toggling application theme.
+   */
+  onToggleTheme(): void {
+    this.appService.theme === 'light'
+      ? this.appService.setTheme('dark')
+      : this.appService.setTheme('light');
   }
 }

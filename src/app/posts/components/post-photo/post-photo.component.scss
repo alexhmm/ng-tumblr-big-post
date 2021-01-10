@@ -64,16 +64,32 @@
       }
     }
     &-caption {
+      display: flex;
+      flex-wrap: wrap;
+      height: 20px;
       right: 16px;
       overflow: hidden;
       position: absolute;
-      text-overflow: ellipsis;
-      text-transform: uppercase;
       top: -32px;
-      white-space: nowrap;
       width: calc(100% - 32px);
+      &-tag {
+        color: var(--theme-color);
+        margin-left: 8px;
+        opacity: 0.5;
+        overflow: hidden;
+        text-overflow: clip;
+        white-space: nowrap;
+      }
+      &-title {
+        width: fit-content;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
     }
     & img {
+      filter: var(--posts-filter);
       max-height: 60vh;
       max-width: 100%;
     }
@@ -124,40 +140,19 @@
   }
 }
 
-@media (pointer: coarse) {
-  .post-photo {
-    &-image {
-      &-next {
-        & svg {
-          display: block;
-          opacity: 1;
-          & line {
-            stroke: none;
-          }
-          & polyline {
-            stroke: $light-background-color;
-          }
-        }
-      }
-      &-prev {
-        & svg {
-          display: block;
-          opacity: 1;
-          & line {
-            stroke: none;
-          }
-          & polyline {
-            stroke: $light-background-color;
-          }
-        }
-      }
-    }
-  }
-}
-
 @media (hover: hover) {
   .post-photo {
     &-image {
+      &-caption {
+        &-tag {
+          @include transition(0.5s, 0s, ease-out, color, opacity);
+          cursor: pointer;
+          &:hover {
+            color: var(--theme-color-hover);
+            opacity: 1;
+          }
+        }
+      }
       &-next {
         &:hover {
           & svg {
@@ -169,7 +164,7 @@
           display: block;
           & line,
           polyline {
-            stroke: $light-background-color;
+            stroke: var(--posts-nav-item-color);
           }
         }
       }
@@ -184,7 +179,7 @@
           display: block;
           & line,
           polyline {
-            stroke: $light-background-color;
+            stroke: var(--posts-nav-item-color);
           }
         }
       }

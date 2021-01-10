@@ -4,10 +4,19 @@
     opacity: postVisible ? 1 : 0
   }"
 >
-  <div class="post-photo-image">
-    <img [src]="src" (load)="onPostLoaded()" />
+  <div (swipe)="onSwipe($event)" class="post-photo-image">
+    <img [src]="postSrc" (load)="onPostLoaded()" />
     <div class="post-photo-image-caption">
-      {{ post?.summary }}
+      <div class="post-photo-image-caption-title">{{ post?.summary }}</div>
+      <ng-container *ngIf="stateTags">
+        <div
+          *ngFor="let tag of post?.tags"
+          (click)="onTag(tag)"
+          class="post-photo-image-caption-tag"
+        >
+          #{{ tag }}
+        </div></ng-container
+      >
     </div>
     <div
       *ngIf="!postId && currentIndex > 0"

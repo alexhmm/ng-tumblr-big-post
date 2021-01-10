@@ -1,6 +1,19 @@
-$light-background-color: #fafafa;
-$light-color: #4b4f56;
-$light-color-hover: black;
-$light-menu-background-color: #f8f8f8;
-$light-nav-color: #757b85;
-$light-nav-color-hover: black;
+html {
+  --posts-nav-item-color: #fafafa;
+}
+
+html[theme='light'] {
+  --menu-background-color: #f8f8f8;
+  --theme-background-color: #fafafa;
+  --theme-color: #4b4f56;
+  --theme-color-hover: black;
+  --posts-filter: unset;
+}
+
+html[theme='dark'] {
+  --menu-background-color: #252525;
+  --theme-background-color: #1f1f1f;
+  --theme-color: #d6d6d6;
+  --theme-color-hover: white;
+  --posts-filter: brightness(0.9);
+}

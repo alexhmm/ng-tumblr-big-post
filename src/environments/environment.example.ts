@@ -27,11 +27,6 @@ export const environment = {
   `,
 
   /**
-   * Archive menu item visibility
-   */
-  archive: false,
-
-  /**
    * Copyright text
    * type: string
    */
@@ -49,5 +44,23 @@ export const environment = {
     tiktok: '',
     twitch: '',
     twitter: ''
+  },
+  /**
+   * Display state for various elements
+   * type: boolean object
+   */
+  state: {
+    menu: {
+      /**
+       * Display state for archive menu item
+       */
+      archive: false
+    },
+    posts: {
+      /**
+       * Display state for tags in post caption
+       */
+      tags: false
+    }
   }
 };

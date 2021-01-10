@@ -68,7 +68,7 @@ export interface Post {
   /**
    * Photos
    */
-  photos: any[];
+  photos: any;
   /**
    * Post URL
    */
