@@ -125,6 +125,15 @@ export class MenuComponent implements OnInit {
   }
 
   /**
+   * Handler on clicking home menu item.
+   */
+  onClickHome(): void {
+    this.postsService.setCurrentIndex(0);
+    this.postsService.setTag(null);
+    this.onMenuToggle();
+  }
+
+  /**
    * Handler to close menu.
    */
   onMenuClose(): void {
