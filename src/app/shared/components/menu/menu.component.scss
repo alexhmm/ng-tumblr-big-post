@@ -16,14 +16,17 @@
     z-index: 50;
     &-copyright {
       @include transition(0.5s, 0s, ease-out, opacity);
-      bottom: 32px;
+      align-items: center;
+      bottom: 16px;
       color: var(--theme-color);
       display: flex;
       font-size: 0.8rem;
+      height: 32px;
       justify-content: center;
+      left: 50%;
       opacity: 0;
       position: fixed;
-      width: 100%;
+      transform: translateX(-50%);
     }
     &-navigation {
       align-items: flex-end;
@@ -136,7 +139,7 @@
     &-container {
       justify-content: center;
       &-copyright {
-        bottom: 64px;
+        bottom: 32px;
       }
       &-search {
         left: unset;
@@ -204,7 +207,7 @@
     }
     &-container {
       &-copyright {
-        bottom: 64px;
+        bottom: 48px;
       }
       &-navigation {
         font-size: 6rem;
