@@ -235,7 +235,7 @@ export class MenuComponent implements OnInit {
     this.searchElem.nativeElement.children[0].blur();
 
     // Check search value for # on first character. If so remove
-    let searchValue = this.searchForm.controls.search.value;
+    let searchValue = this.searchForm.controls.search.value.toLowerCase();
     if (searchValue.charAt(0) === '#') {
       searchValue = searchValue.substring(1, searchValue.length);
     }
