@@ -257,8 +257,13 @@ export class MenuComponent implements OnInit {
    */
   onSearch(): void {
     this.onMenuClose();
-    // Remove input focus (closes mobile keyboard)
-    this.searchElem.nativeElement.children[0].blur();
+
+    // Causes crash on Firefox mobile
+    const userAgent = navigator.userAgent;
+    if (!userAgent.includes('Firefox')) {
+      // Remove input focus (closes mobile keyboard)
+      this.searchElem.nativeElement.children[0].blur();
+    }
 
     // Check search value for # on first character. If so remove
     let searchValue = this.searchForm.controls.search.value.toLowerCase();
