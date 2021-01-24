@@ -255,16 +255,18 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
       Math.round($event.touches[0].clientX) > -1 &&
       this.postPhotoTouchStart.clientX >
         Math.round($event.touches[0].clientX) + 60 &&
-      Math.round($event.touches[0].clientY) <
-        this.postPhotoTouchStart.clientY + 60
+      Math.abs(
+        Math.round($event.touches[0].clientY) - this.postPhotoTouchStart.clientY
+      ) < 60
     ) {
       this.onNextPost();
     } else if (
       Math.round($event.touches[0].clientX) > -1 &&
       this.postPhotoTouchStart.clientX <
         Math.round($event.touches[0].clientX) - 60 &&
-      Math.round($event.touches[0].clientY) <
-        this.postPhotoTouchStart.clientY + 60
+      Math.abs(
+        Math.round($event.touches[0].clientY) - this.postPhotoTouchStart.clientY
+      ) < 60
     ) {
       this.onPreviousPost();
     }
