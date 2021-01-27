@@ -117,14 +117,6 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {}
 
   /**
-   * Handler on clicking about menu item.
-   */
-  onClickAbout(): void {
-    this.postsService.setTag(null);
-    this.onMenuToggle();
-  }
-
-  /**
    * Handler on clicking home menu item.
    */
   onClickHome(): void {

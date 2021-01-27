@@ -15,6 +15,21 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+  &-counter {
+    @include transition(0.25s, 0s, ease-in-out, opacity);
+    align-items: center;
+    bottom: 0;
+    color: var(--theme-color);
+    display: flex;
+    height: 20vh;
+    justify-content: center;
+    left: 50%;
+    opacity: 0;
+    position: fixed;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    z-index: 20;
+  }
   &-loading {
     position: fixed;
     top: 50%;
@@ -32,10 +47,67 @@
     top: 0;
     width: 100%;
   }
+  &-tag {
+    @include highlight-disable();
+    align-items: center;
+    bottom: 0;
+    color: var(--theme-color);
+    display: flex;
+    height: 20vh;
+    position: fixed;
+    right: 16px;
+    z-index: 20;
+    &-container {
+      align-items: center;
+      display: flex;
+      &-button {
+        align-items: center;
+        display: flex;
+        height: 24px;
+        margin-left: 12px;
+        width: 24px;
+        &-line-1 {
+          background-color: var(--theme-color);
+          position: absolute;
+          height: 2px;
+          transform: rotate(45deg);
+          width: 24px;
+        }
+        &-line-2 {
+          background-color: var(--theme-color);
+          position: absolute;
+          height: 2px;
+          transform: rotate(-45deg);
+          width: 24px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: $xs) {
+  .posts {
+    &-counter,
+    &-tag {
+      height: 17.5vh;
+    }
+  }
+}
+
+@media (min-width: $sm) {
+  .posts {
+    &-tag {
+      right: 32px;
+    }
+  }
 }
 
 @media (min-width: $md) {
   .posts {
+    &-counter,
+    &-tag {
+      height: 15vh;
+    }
     &-none {
       font-size: 1.5rem;
     }
@@ -44,8 +116,51 @@
 
 @media (min-width: $xl) {
   .posts {
+    &-counter,
+    &-tag {
+      height: 10vh;
+    }
     &-none {
       font-size: 2rem;
+    }
+    &-tag {
+      right: 48px;
+    }
+  }
+}
+
+@media (hover: hover) {
+  .posts {
+    &-tag {
+      &-container {
+        &-button {
+          &-line-1,
+          &-line-2 {
+            @include transition(
+              0.5s,
+              0s,
+              ease-out,
+              background-color,
+              transform
+            );
+          }
+        }
+        &-text {
+          @include transition(0.5s, 0s, ease-out, color, transform);
+        }
+        &:hover {
+          cursor: pointer;
+          & .posts-tag-container-button {
+            &-line-1,
+            &-line-2 {
+              background-color: var(--theme-color-hover);
+            }
+          }
+          & .posts-tag-container-text {
+            color: var(--theme-color-hover);
+          }
+        }
+      }
     }
   }
 }

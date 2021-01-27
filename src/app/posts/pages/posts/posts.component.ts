@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -49,6 +49,11 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
   postsLoaded: boolean[] = [];
 
   /**
+   * Counter state
+   */
+  stateCounter: boolean;
+
+  /**
    * Loading state
    */
   stateLoading: boolean;
@@ -75,6 +80,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private postsService: PostsService
   ) {}
 
@@ -83,6 +89,7 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   ngOnInit(): void {
     this.initSubscriptionPosts();
+    this.initSubscriptionStateCounter();
     this.initSubscriptionStateLoading();
     this.initSubscriptionRouteParams();
     this.initSubscriptionTotalPosts();
@@ -226,6 +233,17 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
+   * Subscription on route params.
+   */
+  initSubscriptionStateCounter(): void {
+    this.postsService.stateCounter
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(stateCounter => {
+        this.stateCounter = stateCounter;
+      });
+  }
+
+  /**
    * Inits subscription on loading state.
    */
   initSubscriptionStateLoading(): void {
@@ -243,5 +261,13 @@ export class PostsComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(totalPosts => {
         this.totalPosts = totalPosts;
       });
+  }
+
+  /**
+   * Handler on removing tag.
+   */
+  onHome(): void {
+    this.router.navigate(['']);
+    this.postsService.setTag(null);
   }
 }
