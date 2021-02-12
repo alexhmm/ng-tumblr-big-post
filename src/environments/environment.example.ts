@@ -33,6 +33,12 @@ export const environment = {
   copyright: '',
 
   /**
+   * Favicon link
+   * type: string
+   */
+  favicon: '',
+
+  /**
    * Social media names to show links in menu
    * type: string object
    */

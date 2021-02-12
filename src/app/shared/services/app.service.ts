@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
+
 /**
  * Debounce for @HostListener event
  * https://stackoverflow.com/questions/44634992/debounce-hostlistener-event?rq=1
@@ -47,7 +49,23 @@ export class AppService {
 
   unsubscribe$: Subject<any> = new Subject();
 
-  constructor() {}
+  /**
+   * AppService constructor.
+   */
+  constructor() {
+    this.setFavicon();
+  }
+
+  /**
+   * Sets favicon on app init.
+   */
+  setFavicon(): void {
+    if (environment.favicon && environment.favicon.length > 0) {
+      document
+        .getElementById('favicon')
+        .setAttribute('href', environment.favicon);
+    }
+  }
 
   /**
    * Sets screen state when window width changes.
