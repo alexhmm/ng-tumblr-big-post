@@ -143,7 +143,7 @@ export class MenuComponent implements OnInit, OnDestroy {
    * Inits subscription on app theme.
    */
   initSubscriptionTheme(): void {
-    this.appService.stateTheme
+    this.appService.theme
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(theme => {
         this.theme = theme;

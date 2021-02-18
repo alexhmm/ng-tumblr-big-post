@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 
@@ -42,19 +42,24 @@ export class AppService {
   stateScreen = this.stateScreenSrc.asObservable();
 
   /**
-   * Theme state BehaviorSubject
+   * Theme BehaviorSubject
    */
-  stateThemeSrc = new BehaviorSubject('light');
+  themeSrc = new BehaviorSubject(null);
 
   /**
-   * Theme state Observable
+   * Theme Observable
    */
-  stateTheme = this.stateThemeSrc.asObservable();
+  theme = this.themeSrc.asObservable();
 
-  stateWidthSrc = new BehaviorSubject(window.innerWidth);
-  stateWidth = this.stateWidthSrc.asObservable();
+  /**
+   * Window width BehaviorSubject
+   */
+  widthSrc = new BehaviorSubject(window.innerWidth);
 
-  unsubscribe$: Subject<any> = new Subject();
+  /**
+   * Window width Observable
+   */
+  width = this.widthSrc.asObservable();
 
   /**
    * AppService constructor.
@@ -131,7 +136,8 @@ export class AppService {
         .querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')
         .setAttribute('content', '#1f1f1f');
     }
-    this.stateThemeSrc.next(theme);
+    this.themeSrc.next(theme);
     document.documentElement.setAttribute('theme', theme);
+    localStorage.setItem('theme', theme);
   }
 }
