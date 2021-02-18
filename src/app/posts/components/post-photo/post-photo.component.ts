@@ -1,5 +1,6 @@
 import {
   Component,
+  HostListener,
   Input,
   OnChanges,
   OnDestroy,
@@ -11,7 +12,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { fadeInOut } from 'src/app/shared/services/animations';
-import { AppService } from 'src/app/shared/services/app.service';
+import { debounce, AppService } from 'src/app/shared/services/app.service';
 import { PostsService } from 'src/app/shared/services/posts.service';
 import { environment } from 'src/environments/environment';
 
@@ -53,6 +54,14 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() postIndex: number;
 
   /**
+   * Photo post touch start
+   */
+  postPhotoTouchStart: { clientX: number; clientY: number } = {
+    clientX: null,
+    clientY: null
+  };
+
+  /**
    * Post image source
    */
   postSrc = '';
@@ -91,6 +100,25 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
    * Unsubscribe
    */
   unsubscribe$ = new Subject();
+
+  /**
+   * HostListener on window resize
+   * @param $event Window resize event
+   */
+  @HostListener('touchstart', ['$event'])
+  onTouchStart($event): void {
+    this.onPostPhotoTouchStart($event);
+  }
+
+  /**
+   * HostListener on window resize
+   * @param $event Window resize event
+   */
+  @HostListener('touchmove', ['$event'])
+  @debounce(50)
+  onTouchMove($event): void {
+    this.onPostPhotoTouchMove($event);
+  }
 
   /**
    * PostPhotoComponent constructor.
@@ -215,6 +243,45 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
+   * Handler on photo post touch move event.
+   * @param $event Touchstart event
+   */
+  onPostPhotoTouchMove($event): void {
+    // Check if
+    // horizontal touch move is bigger than 60 pixels
+    // and vertical touch move less than 60 pixels (prevent zoom)
+    // to show previous or next post
+    if (
+      Math.round($event.touches[0].clientX) > -1 &&
+      this.postPhotoTouchStart.clientX >
+        Math.round($event.touches[0].clientX) + 60 &&
+      Math.abs(
+        Math.round($event.touches[0].clientY) - this.postPhotoTouchStart.clientY
+      ) < 60
+    ) {
+      this.onNextPost();
+    } else if (
+      Math.round($event.touches[0].clientX) > -1 &&
+      this.postPhotoTouchStart.clientX <
+        Math.round($event.touches[0].clientX) - 60 &&
+      Math.abs(
+        Math.round($event.touches[0].clientY) - this.postPhotoTouchStart.clientY
+      ) < 60
+    ) {
+      this.onPreviousPost();
+    }
+  }
+
+  /**
+   * Handler on photo post touch start event.
+   * @param $event Touchstart event
+   */
+  onPostPhotoTouchStart($event): void {
+    this.postPhotoTouchStart.clientX = Math.round($event.touches[0].clientX);
+    this.postPhotoTouchStart.clientY = Math.round($event.touches[0].clientY);
+  }
+
+  /**
    * Event when image loading has finished.
    */
   onPostLoaded(): void {
@@ -227,18 +294,6 @@ export class PostPhotoComponent implements OnInit, OnChanges, OnDestroy {
   onPreviousPost(): void {
     if (this.currentIndex > 0) {
       this.postsService.setPreviousIndex(this.currentIndex - 1);
-    }
-  }
-
-  /**
-   * Handler on swipe posts.
-   * @param $event Swipe event
-   */
-  onSwipe($event): void {
-    if ($event.deltaX > 40) {
-      this.onPreviousPost();
-    } else if ($event.deltaX < -40) {
-      this.onNextPost();
     }
   }
 

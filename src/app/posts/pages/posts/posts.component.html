@@ -25,4 +25,28 @@
   <section *ngIf="totalPosts === 0" class="posts-none" @fadeInOut>
     No posts found{{ tag ? ' with tag #' + tag : null }}.
   </section>
+
+  <section
+    *ngIf="stateCounter && currentIndex > -1 && totalPosts > 0"
+    class="posts-counter"
+    [ngStyle]="{ opacity: totalPosts > 0 ? 1 : 0 }"
+    @fadeInOut
+  >
+    {{ currentIndex + 1 }} / {{ totalPosts }}
+  </section>
+
+  <section
+    *ngIf="tag && tag !== ''"
+    (click)="onHome()"
+    class="posts-tag"
+    @fadeInOut
+  >
+    <div class="posts-tag-container">
+      <div class="posts-tag-container-text">#{{ tag }}</div>
+      <div class="posts-tag-container-button">
+        <div class="posts-tag-container-button-line-1"></div>
+        <div class="posts-tag-container-button-line-2"></div>
+      </div>
+    </div>
+  </section>
 </main>

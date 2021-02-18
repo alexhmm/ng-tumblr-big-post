@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
+
 import { AppService, debounce } from './shared/services/app.service';
 
 import { PostsService } from './shared/services/posts.service';
@@ -42,7 +43,7 @@ export class AppComponent implements OnInit {
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
    */
   ngOnInit(): void {
-    this.appService.setTheme('light');
+    this.appService.setTheme(localStorage.getItem('theme') || 'light');
     this.onKeyUse();
     this.onMousewheelUse();
   }

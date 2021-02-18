@@ -4,7 +4,7 @@
     opacity: postVisible ? 1 : 0
   }"
 >
-  <div (swipe)="onSwipe($event)" class="post-photo-image">
+  <div class="post-photo-image">
     <img [src]="postSrc" (load)="onPostLoaded()" />
     <div class="post-photo-image-caption">
       <div class="post-photo-image-caption-title">{{ post?.summary }}</div>

@@ -1,6 +1,7 @@
 import {
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   QueryList,
   Renderer2,
@@ -9,6 +10,8 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { AppService } from '../../services/app.service';
@@ -19,7 +22,7 @@ import { PostsService } from '../../services/posts.service';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
   /**
    * About
    */
@@ -100,9 +103,19 @@ export class MenuComponent implements OnInit {
   stateMenuToggle = false;
 
   /**
+   * Theme state
+   */
+  theme: string;
+
+  /**
    * Theme element
    */
   @ViewChild('themeElem') themeElem: ElementRef;
+
+  /**
+   * Unsubscribe
+   */
+  unsubscribe$ = new Subject();
 
   constructor(
     private renderer2: Renderer2,
@@ -114,14 +127,27 @@ export class MenuComponent implements OnInit {
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
    */
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initSubscriptionTheme();
+  }
 
   /**
-   * Handler on clicking about menu item.
+   * A lifecycle hook that is called when a directive, pipe, or service is destroyed.
    */
-  onClickAbout(): void {
-    this.postsService.setTag(null);
-    this.onMenuToggle();
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  /**
+   * Inits subscription on app theme.
+   */
+  initSubscriptionTheme(): void {
+    this.appService.theme
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(theme => {
+        this.theme = theme;
+      });
   }
 
   /**
@@ -257,8 +283,13 @@ export class MenuComponent implements OnInit {
    */
   onSearch(): void {
     this.onMenuClose();
-    // Remove input focus (closes mobile keyboard)
-    this.searchElem.nativeElement.children[0].blur();
+
+    // Causes crash on Firefox mobile
+    const userAgent = navigator.userAgent;
+    if (!userAgent.includes('Firefox')) {
+      // Remove input focus (closes mobile keyboard)
+      this.searchElem.nativeElement.children[0].blur();
+    }
 
     // Check search value for # on first character. If so remove
     let searchValue = this.searchForm.controls.search.value.toLowerCase();
@@ -277,7 +308,7 @@ export class MenuComponent implements OnInit {
    * Handler on toggling application theme.
    */
   onToggleTheme(): void {
-    this.appService.theme === 'light'
+    this.theme === 'light'
       ? this.appService.setTheme('dark')
       : this.appService.setTheme('light');
   }

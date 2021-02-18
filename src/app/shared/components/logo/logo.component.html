@@ -1,3 +1,6 @@
-<div *ngIf="title" class="logo" @fadeInOut>
-  <a routerLink="/" (click)="onHome()">{{ title }}</a>
-</div>
+<a *ngIf="title && !logo" routerLink="/" (click)="onHome()" class="logo">{{
+  title
+}}</a>
+<a *ngIf="logo" routerLink="/" (click)="onHome()"
+  ><img [src]="logo" class="logo" @fadeInOut
+/></a>

@@ -7,7 +7,6 @@ html[theme='light'] {
   --theme-background-color: #fafafa;
   --theme-color: #4b4f56;
   --theme-color-hover: black;
-  --posts-filter: unset;
 }
 
 html[theme='dark'] {
@@ -15,5 +14,4 @@ html[theme='dark'] {
   --theme-background-color: #1f1f1f;
   --theme-color: #d6d6d6;
   --theme-color-hover: white;
-  --posts-filter: brightness(0.9);
 }
