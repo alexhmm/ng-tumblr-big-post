@@ -33,10 +33,19 @@ export const environment = {
   copyright: '',
 
   /**
-   * Favicon link
+   * Favicon url
    * type: string
    */
   favicon: '',
+
+  /**
+   * Logo urls
+   * type: string object
+   */
+  logo: {
+    dark: '',
+    light: ''
+  },
 
   /**
    * Social media names to show links in menu
@@ -51,6 +60,7 @@ export const environment = {
     twitch: '',
     twitter: ''
   },
+
   /**
    * Display state for various elements
    * type: boolean object

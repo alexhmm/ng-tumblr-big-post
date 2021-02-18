@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { take } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 import { fadeInOut } from '../../services/animations';
+import { AppService } from '../../services/app.service';
 import { PostsService } from '../../services/posts.service';
 
 @Component({
@@ -10,19 +13,64 @@ import { PostsService } from '../../services/posts.service';
   styleUrls: ['./logo.component.scss'],
   animations: [fadeInOut]
 })
-export class LogoComponent implements OnInit {
+export class LogoComponent implements OnInit, OnDestroy {
+  /**
+   * Application logo URL
+   */
+  logo: string;
+
   /**
    * Blog title
    */
   title: string;
 
-  constructor(private postsService: PostsService) {}
+  /**
+   * Unsubscribe
+   */
+  unsubscribe$ = new Subject();
+
+  constructor(
+    private appService: AppService,
+    private postsService: PostsService
+  ) {}
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
    */
   ngOnInit(): void {
+    this.initSubscriptionTheme();
     this.initSubscriptionTitle();
+  }
+
+  /**
+   * A lifecycle hook that is called when a directive, pipe, or service is destroyed.
+   */
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  /**
+   * Inits subscription on app theme.
+   */
+  initSubscriptionTheme(): void {
+    this.appService.stateTheme
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(theme => {
+        if (
+          theme === 'light' &&
+          environment?.logo?.light &&
+          environment.logo.light !== ''
+        ) {
+          this.logo = environment.logo.light;
+        } else if (
+          theme === 'dark' &&
+          environment?.logo?.dark &&
+          environment.logo.dark !== ''
+        ) {
+          this.logo = environment.logo.dark;
+        }
+      });
   }
 
   /**

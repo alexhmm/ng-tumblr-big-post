@@ -32,18 +32,25 @@ export class AppService {
   readonly fhd: number = 1920;
 
   /**
-   * Screen state
+   * Screen state BehaviorSubject
    */
-  screen: string;
+  stateScreenSrc = new BehaviorSubject(null);
 
   /**
-   * Application theme
+   * Screen state Observable
    */
-  theme = 'light';
-
-  // Observables
-  stateScreenSrc = new BehaviorSubject(null);
   stateScreen = this.stateScreenSrc.asObservable();
+
+  /**
+   * Theme state BehaviorSubject
+   */
+  stateThemeSrc = new BehaviorSubject('light');
+
+  /**
+   * Theme state Observable
+   */
+  stateTheme = this.stateThemeSrc.asObservable();
+
   stateWidthSrc = new BehaviorSubject(window.innerWidth);
   stateWidth = this.stateWidthSrc.asObservable();
 
@@ -72,27 +79,33 @@ export class AppService {
    * @param width Window width
    */
   setScreenState(width: number): void {
-    if (width < this.sm && this.screen !== 'xs') {
-      this.screen = 'xs';
+    if (width < this.sm && this.stateScreenSrc.value !== 'xs') {
       this.stateScreenSrc.next('xs');
-    } else if (width > this.sm - 1 && width < this.md && this.screen !== 'sm') {
-      this.screen = 'sm';
+    } else if (
+      width > this.sm - 1 &&
+      width < this.md &&
+      this.stateScreenSrc.value !== 'sm'
+    ) {
       this.stateScreenSrc.next('sm');
-    } else if (width > this.md - 1 && width < this.lg && this.screen !== 'md') {
-      this.screen = 'md';
+    } else if (
+      width > this.md - 1 &&
+      width < this.lg &&
+      this.stateScreenSrc.value !== 'md'
+    ) {
       this.stateScreenSrc.next('md');
-    } else if (width > this.lg - 1 && width < this.xl && this.screen !== 'lg') {
-      this.screen = 'lg';
+    } else if (
+      width > this.lg - 1 &&
+      width < this.xl &&
+      this.stateScreenSrc.value !== 'lg'
+    ) {
       this.stateScreenSrc.next('lg');
     } else if (
       width > this.xl - 1 &&
       width < this.fhd &&
-      this.screen !== 'xl'
+      this.stateScreenSrc.value !== 'xl'
     ) {
-      this.screen = 'xl';
       this.stateScreenSrc.next('xl');
-    } else if (width > this.fhd - 1 && this.screen !== 'fhd') {
-      this.screen = 'fhd';
+    } else if (width > this.fhd - 1 && this.stateScreenSrc.value !== 'fhd') {
       this.stateScreenSrc.next('fhd');
     }
   }
@@ -102,6 +115,7 @@ export class AppService {
    * @param theme App theme
    */
   setTheme(theme: string): void {
+    // Set mobile status bar
     if (theme === 'light') {
       document
         .querySelector('meta[name="theme-color"]')
@@ -117,7 +131,7 @@ export class AppService {
         .querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')
         .setAttribute('content', '#1f1f1f');
     }
-    this.theme = theme;
-    document.documentElement.setAttribute('theme', this.theme);
+    this.stateThemeSrc.next(theme);
+    document.documentElement.setAttribute('theme', theme);
   }
 }
